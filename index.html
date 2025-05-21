@@ -127,6 +127,7 @@
      <p class="instructions" id="instructions">Drag the Hemoglobin (Heme b) molecule towards the Chlorophyll a molecule.</p>
 
     <!-- Molfile data embedded as script tags -->
+    <!-- Heme b Molfile -->
     <script type="chemical/x-mdl-molfile" id="heme-molfile">
 HEADER
   Kekule.js
@@ -222,6 +223,7 @@ HEADER
 M  END
 </script>
 
+    <!-- Chlorophyll a Molfile -->
     <script type="chemical/x-mdl-molfile" id="chlorophyll-molfile">
 HEADER
   Kekule.js
@@ -403,7 +405,7 @@ M  END
                  if (!viewer || !atom) return null;
 
                  // Get the rendering context
-                const render2D = viewer.get anding('2D'); // assuming 2D rendering
+                const render2D = viewer.getRendering('2D'); // Corrected typo here!
 
                  if (render2D) {
                      // Get the coordinate of the atom in molecule's internal coordinate system
