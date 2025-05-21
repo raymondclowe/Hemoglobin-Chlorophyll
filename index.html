@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chlorophyll vs Hemoglobin: A Structural Comparison</title>
+    <!-- Include Kekule.js CSS and Script -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/kekule/dist/themes/default/kekule.css" />
+    <script src="https://cdn.jsdelivr.net/npm/kekule/dist/kekule.min.js"></script>
+
     <style>
         body {
             font-family: sans-serif;
@@ -48,13 +52,13 @@
             transition: box-shadow 0.3s ease;
             position: relative; /* Needed for absolute positioning */
             width: 500px; /* Fixed width, increased for more detailed diagrams */
-            height: 680px; /* Fixed height, increased */
+            height: 650px; /* Fixed height, increased */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
             box-sizing: border-box; /* Include padding in width/height */
-            overflow: hidden; /* Hide overflow from SVG slightly */
+            overflow: hidden; /* Ensure molecule doesn't overflow container */
         }
 
         .molecule-container h2 {
@@ -63,14 +67,13 @@
             margin-bottom: 20px;
         }
 
-        .molecule-container svg {
+        /* Style for the Kekule.js viewer container */
+        .kekule-viewer {
             width: 100%;
-            height: auto;
-            max-height: 580px; /* Limit SVG height */
-            display: block;
-            margin: auto;
-            overflow: visible; /* Allow labels/tails slightly outside viewBox if needed */
+            height: 100%; /* Fill the rest of the container height */
+            border: none; /* Remove default border */
         }
+
 
         #hemoglobin-container {
             cursor: grab;
@@ -92,96 +95,12 @@
              z-index: 5; /* Can go below chlorophyll after snap */
         }
 
-
-        /* SVG Styling */
-        .bond {
-            stroke: #000; /* Black bonds */
-            stroke-width: 1.8; /* Slightly thinner bonds for complexity */
-            fill: none;
-            transition: stroke 0.3s ease-out, stroke-width 0.3s ease-out; /* Transition for highlighting */
-            stroke-linecap: round; /* Nicer look for bond ends */
-        }
-
-         /* Style for double bonds (offset lines) */
-         .double-bond {
-             stroke: #000; /* Black */
-             stroke-width: 1.8;
-             fill: none;
-             transition: stroke 0.3s ease-out;
-             stroke-linecap: round;
-         }
-
-
-        .atom-label {
-            fill: #000; /* Black text for atom labels */
-            font-size: 12px; /* Smaller font size */
-            text-anchor: middle;
-            dominant-baseline: central;
-            pointer-events: none; /* Don't interfere with dragging */
-            transition: fill 0.3s ease-out; /* Transition for highlighting */
-             font-weight: normal; /* Default weight */
-        }
-
-        /* Specific atom label adjustments */
-         .atom-label.N { fill: #1a237e; font-size: 13px; } /* Nitrogen - dark blue */
-         .atom-label.Mg { fill: #388e3c; font-size: 16px; font-weight: bold; } /* Magnesium - green, larger, bold */
-         .atom-label.Fe { fill: #d32f2f; font-size: 16px; font-weight: bold; } /* Iron - red, larger, bold */
-         .atom-label.O { fill: #bf360c; font-size: 12px; } /* Oxygen - orange-red */
-
-
-        /* Common parts highlighting */
-        .common-bond {
-            /* Default style */
-        }
-         .common-atom-label {
-            /* Default style */
-        }
-
-
-        /* --- Highlighting Animation --- */
-        /* Flash (initial bright state) */
-        .common-bond.flash, .double-bond.flash {
-             stroke: #ffeb3b; /* Bright yellow */
-             stroke-width: 3; /* Thicker flash */
-        }
-         .common-atom-label.flash {
-            fill: #ffeb3b; /* Bright yellow */
-        }
-
-        /* Highlighted (final persistent state) */
-        .common-bond.highlighted, .double-bond.highlighted {
-             stroke: #ffc107; /* Amber */
-             stroke-width: 2.5; /* Slightly thicker than default */
-        }
-        .common-atom-label.highlighted {
-            fill: #ffc107; /* Amber */
-        }
-
-        /* Transition definition for the highlight */
-        .bond.flash, .bond.highlighted,
-        .double-bond.flash, .double-bond.highlighted,
-        .atom-label.flash, .atom-label.highlighted {
-             transition: stroke 0.3s ease-in-out, stroke-width 0.3s ease-in-out, fill 0.3s ease-in-out;
-        }
-
-
-        /* Optional: Non-common parts can be slightly faded or different color */
-        .non-common .bond, .non-common .double-bond {
-             stroke: #666;
-             opacity: 0.7;
-        }
-         .non-common .atom-label {
-             fill: #666;
-             opacity: 0.8;
-        }
-
         /* Instructions */
         .instructions {
             margin-top: 30px;
             font-size: 1.1em;
             color: #004d40;
             min-height: 1.5em; /* Reserve space to prevent layout shift */
-             transition: color 0.5s ease; /* Smooth color change */
         }
 
     </style>
@@ -193,536 +112,562 @@
 
     <div class="container">
         <div id="chlorophyll-container" class="molecule-container">
-            <h2>Chlorophyll (Core)</h2>
-            <svg id="chlorophyll-svg" viewBox="-160 -180 320 360">
-                <!-- Redrawn SVG for Skeletal Structure Style -->
-                <!-- Coordinates are approximate for visual representation -->
-
-                <!-- Common Chlorin Core (partially common with Porphyrin) -->
-                <g class="porphyrin-core common">
-                    <!-- Central Mg -->
-                    <circle cx="0" cy="0" r="5" class="atom-label Mg"></circle>
-                    <text x="0" cy="0" class="atom-label Mg">Mg</text>
-
-                    <!-- Nitrogens -->
-                    <text x="60" cy="0" class="atom-label N">N</text>
-                    <text x="-60" cy="0" class="atom-label N">N</text>
-                    <text x="0" cy="60" class="atom-label N">N</text>
-                    <text x="0" cy="-60" class="atom-label N">N</text>
-
-                    <!-- Bonds from Mg to N -->
-                    <line x1="0" y1="0" x2="55" y2="0" class="bond common-bond"></line>
-                    <line x1="0" y1="0" x2="-55" y2="0" class="bond common-bond"></line>
-                    <line x1="0" y1="0" x2="0" y2="55" class="bond common-bond"></line>
-                    <line x1="0" y1="0" x2="0" y2="-55" class="bond common-bond"></line>
-
-                    <!-- Pyrrole/Chlorin Rings and Methine Bridges -->
-                    <!-- Coordinates refined to resemble standard drawing -->
-
-                    <!-- Ring I (Top Right) -->
-                    <line x1="60" y1="0" x2="80" y2="-30" class="bond common-bond"></line>
-                    <line x1="80" y1="-30" x2="60" y2="-60" class="bond common-bond"></line>
-                    <line x1="60" y1="-60" x2="30" y2="-60" class="bond common-bond"></line>
-                    <line x1="30" y1="-60" x2="20" y2="-30" class="bond common-bond"></line>
-                    <line x1="20" y1="-30" x2="60" y2="0" class="bond common-bond"></line>
-                    <!-- Double bond in Ring I -->
-                    <line x1="68" y1="-53" x2="58" y2="-53" class="double-bond common-bond"></line>
-
-                    <!-- Ring II (Bottom Right) -->
-                    <line x1="60" y1="0" x2="80" y2="30" class="bond common-bond"></line>
-                    <line x1="80" y1="30" x2="60" y2="60" class="bond common-bond"></line>
-                    <line x1="60" y1="60" x2="30" y2="60" class="bond common-bond"></line>
-                    <line x1="30" y1="60" x2="20" y2="30" class="bond common-bond"></line>
-                    <line x1="20" y1="30" x2="60" y2="0" class="bond common-bond"></line>
-                    <!-- Double bond in Ring II -->
-                    <line x1="32" y1="53" x2="42" y2="53" class="double-bond common-bond"></line>
-
-                    <!-- Ring III (Bottom Left) - This ring is *reduced* (Chlorin) -->
-                    <!-- Bonds are common, but the double bond pattern differs -->
-                    <line x1="-60" y1="0" x2="-80" y2="30" class="bond common-bond"></line>
-                    <line x1="-80" y1="30" x2="-60" y2="60" class="bond common-bond non-common"></line> <!-- Single bond in chlorin -->
-                    <line x1="-60" y1="60" x2="-30" y2="60" class="bond common-bond non-common"></line> <!-- Single bond in chlorin -->
-                    <line x1="-30" y1="60" x2="-20" y2="30" class="bond common-bond non-common"></line> <!-- Single bond in chlorin -->
-                    <line x1="-20" y1="30" x2="-60" y2="0" class="bond common-bond"></line>
-                     <!-- No double bond in the center of Ring III -->
-
-
-                    <!-- Ring IV (Top Left) -->
-                    <line x1="-60" y1="0" x2="-80" y2="-30" class="bond common-bond"></line>
-                    <line x1="-80" y1="-30" x2="-60" y2="-60" class="bond common-bond"></line>
-                    <line x1="-60" y1="-60" x2="-30" y2="-60" class="bond common-bond"></line>
-                    <line x1="-30" y1="-60" x2="-20" y2="-30" class="bond common-bond"></line>
-                    <line x1="-20" y1="-30" x2="-60" y2="0" class="bond common-bond"></line>
-                     <!-- Double bond in Ring IV -->
-                    <line x1="-68" y1="-53" x2="-58" y2="-53" class="double-bond common-bond"></line>
-
-                    <!-- Methine Bridges -->
-                    <line x1="20" y1="-30" x2="30" y2="-50" class="bond common-bond"></line>
-                    <line x1="30" y1="-50" x2="-30" y2="-50" class="bond common-bond"></line>
-                    <line x1="-30" y1="-50" x2="-20" y2="-30" class="bond common-bond"></line>
-
-                    <line x1="20" y1="30" x2="30" y2="50" class="bond common-bond"></line>
-                    <line x1="30" y1="50" x2="-30" y2="50" class="bond common-bond"></line>
-                    <line x1="-30" y1="50" x2="-20" y2="30" class="bond common-bond"></line>
-
-                    <line x1="80" y1="-30" x2="100" y2="-10" class="bond common-bond"></line>
-                    <line x1="100" y2="-10" x2="100" y2="10" class="bond common-bond"></line>
-                    <line x1="100" y2="10" x2="80" y2="30" class="bond common-bond"></line>
-
-                    <line x1="-80" y1="30" x2="-100" y2="10" class="bond common-bond"></line>
-                    <line x1="-100" y2="10" x2="-100" y2="-10" class="bond common-bond"></line>
-                    <line x1="-100" y2="-10" x2="-80" y2="-30" class="bond common-bond"></line>
-
-                    <!-- Conjugated double bonds in bridges (offset lines) -->
-                    <!-- Top bridge -->
-                    <line x1="30" y1="-55" x2="-30" y2="-55" class="double-bond common-bond"></line>
-                    <!-- Bottom bridge -->
-                     <line x1="30" y1="55" x2="-30" y2="55" class="double-bond common-bond"></line>
-                    <!-- Right bridge -->
-                     <line x1="105" y2="-10" x2="105" y2="10" class="double-bond common-bond"></line>
-                    <!-- Left bridge -->
-                     <line x1="-105" y2="10" x2="-105" y2="-10" class="double-bond common-bond"></line>
-
-                </g>
-
-                <!-- Non-common parts for Chlorophyll -->
-                <g class="non-common">
-                    <!-- Methyl groups -->
-                    <line x1="30" y1="-60" x2="30" y2="-75" class="bond"></line> <!-- Ring I Beta C -->
-                    <line x1="60" y1="-60" x2="75" y2="-70" class="bond"></line> <!-- Ring I Beta C -->
-
-                    <line x1="30" y1="60" x2="30" y2="75" class="bond"></line> <!-- Ring II Beta C -->
-                    <!-- Note: Different substituent on Ring II Beta C in Chlorophyll B (-CHO), but example shows A (-CH3) -->
-                    <!-- Sticking to Methyl based on visual example -->
-                    <line x1="60" y1="60" x2="75" y2="70" class="bond"></line> <!-- Ring II Beta C -->
-
-                     <line x1="-60" y1="-60" x2="-75" y2="-70" class="bond"></line> <!-- Ring IV Beta C -->
-
-
-                    <!-- Vinyl group on Ring III Beta C -->
-                    <line x1="-30" y1="60" x2="-30" y2="75" class="bond"></line>
-                    <line x1="-30" y1="75" x2="-45" y2="85" class="bond"></line>
-                    <line x1="-45" y1="85" x2="-60" y2="85" class="double-bond"></line> <!-- Double bond in Vinyl -->
-
-
-                    <!-- Ethyl group on Ring IV Beta C -->
-                     <line x1="-30" y1="-60" x2="-30" y2="-75" class="bond"></line>
-                      <line x1="-30" y1="-75" x2="-45" y2="-85" class="bond"></line>
-
-
-                    <!-- Fifth Ring (Isocyclic Ring) -->
-                    <!-- Connects Ring III Alpha C to Beta C, with a carbonyl and methyl ester -->
-                     <line x1="-20" y1="30" x2="-10" y2="65" class="bond"></line> <!-- From Ring III Alpha C -->
-                     <line x1="-10" y1="65" x2="20" y2="65" class="bond"></line> <!-- Horizontal bond -->
-                     <line x1="20" y1="65" x2="30" y2="60" class="bond"></line> <!-- To Ring II Beta C -->
-                     <line x1="20" y1="65" x2="20" y2="80" class="double-bond"></line> <!-- Carbonyl double bond -->
-                    <text x="20" y="90" class="atom-label O">O</text>
-
-                    <!-- Methoxycarbonyl group (ester) -->
-                    <line x1="-10" y1="65" x2="-10" y2="80" class="bond"></line> <!-- From fifth ring carbon -->
-                    <text x="-10" y="90" class="atom-label O">O</text> <!-- Ester oxygen -->
-                    <line x1="-10" y2="90" x2="-25" y2="100" class="bond"></line> <!-- Methyl group of ester -->
-
-
-                    <!-- Phytyl Tail attachment point (simplified - just the linkage and label) -->
-                    <!-- Attached to the propionic acid derivative off Ring IV Beta C -->
-                    <line x1="-60" y1="60" x2="-60" y2="75" class="bond"></line> <!-- From Ring III Beta C - oops, should be Ring IV Beta C (-60, -60)! FIXING... -->
-                    <!-- Correcting Phytyl attachment -->
-                    <line x1="-60" y1="60" x2="-60" y2="75" class="bond non-common"></line> <!-- From Ring III Beta C - this looks wrong based on structure, should be propionate off a Beta C -->
-                    <!-- Consulting standard Chlorophyll structure: Propionate is off Ring IV Beta carbon (the one next to reduced ring) -->
-                    <!-- Let's assume it's off -60,-60 vertex -->
-                    <line x1="-60" y1="-60" x2="-60" y2="-75" class="bond non-common"></line> <!-- CH2 -->
-                    <line x1="-60" y1="-75" x2="-75" y2="-85" class="bond non-common"></line> <!-- CH2 -->
-                     <line x1="-75" y2="-85" x2="-75" y2="-100" class="bond non-common"></line> <!-- Carboxyl C -->
-                     <line x1="-75" y2="-100" x2="-85" y2="-110" class="bond non-common"></line> <!-- O bond -->
-                     <text x="-90" y="-110" class="atom-label O non-common">O</text> <!-- Ester Oxygen linking to tail -->
-                    <line x1="-75" y2="-100" x2="-65" y2="-110" class="double-bond non-common"></line> <!-- Carbonyl O -->
-                     <text x="-60" y="-110" class="atom-label O non-common">O</text>
-
-
-                    <!-- Adding a label for the phytyl tail attachment -->
-                    <text x="-130" y="-130" class="atom-label non-common" font-size="10">Phytyl Tail</text>
-                    <line x1="-85" y2="-110" x2="-110" y2="-125" class="bond non-common"></line>
-
-
-                </g>
-
-            </svg>
+            <h2>Chlorophyll a</h2>
+            <div id="chlorophyll-viewer" class="kekule-viewer" data-widget="Kekule.ChemWidget.Viewer" data-enable-toolbar="false" data-render-type="2D" data-autofit="true" data-predefined-setting="clear" >
+            </div>
         </div>
 
         <div id="hemoglobin-container" class="molecule-container">
-            <h2>Hemoglobin (Heme Group)</h2>
-             <svg id="hemoglobin-svg" viewBox="-160 -180 320 360">
-                 <!-- Redrawn SVG for Skeletal Structure Style -->
-                <!-- Coordinates are approximate for visual representation -->
-
-                <!-- Common Porphyrin Core (fully conjugated) -->
-                <g class="porphyrin-core common">
-                    <!-- Central Fe -->
-                    <circle cx="0" cy="0" r="5" class="atom-label Fe"></circle>
-                    <text x="0" cy="0" class="atom-label Fe">Fe</text>
-
-                    <!-- Nitrogens -->
-                    <text x="60" cy="0" class="atom-label N">N</text>
-                    <text x="-60" cy="0" class="atom-label N">N</text>
-                    <text x="0" cy="60" class="atom-label N">N</text>
-                    <text x="0" cy="-60" class="atom-label N">N</text>
-
-                     <!-- Bonds from Fe to N -->
-                    <line x1="0" y1="0" x2="55" y2="0" class="bond common-bond"></line>
-                    <line x1="0" y1="0" x2="-55" y2="0" class="bond common-bond"></line>
-                    <line x1="0" y1="0" x2="0" y2="55" class="bond common-bond"></line>
-                    <line x1="0" y1="0" x2="0" y2="-55" class="bond common-bond"></line>
-
-                    <!-- Pyrrole Rings and Methine Bridges (fully conjugated) -->
-                    <!-- Coordinates refined to resemble standard drawing -->
-
-                    <!-- Ring I (Top Right) -->
-                    <line x1="60" y1="0" x2="80" y2="-30" class="bond common-bond"></line>
-                    <line x1="80" y1="-30" x2="60" y2="-60" class="bond common-bond"></line>
-                    <line x1="60" y1="-60" x2="30" y2="-60" class="bond common-bond"></line>
-                    <line x1="30" y1="-60" x2="20" y2="-30" class="bond common-bond"></line>
-                    <line x1="20" y1="-30" x2="60" y2="0" class="bond common-bond"></line>
-                     <!-- Double bond in Ring I -->
-                    <line x1="68" y1="-53" x2="58" y2="-53" class="double-bond common-bond"></line>
-
-                    <!-- Ring II (Bottom Right) -->
-                     <line x1="60" y1="0" x2="80" y2="30" class="bond common-bond"></line>
-                    <line x1="80" y1="30" x2="60" y2="60" class="bond common-bond"></line>
-                    <line x1="60" y1="60" x2="30" y2="60" class="bond common-bond"></line>
-                    <line x1="30" y1="60" x2="20" y2="30" class="bond common-bond"></line>
-                    <line x1="20" y1="30" x2="60" y2="0" class="bond common-bond"></line>
-                     <!-- Double bond in Ring II -->
-                    <line x1="32" y1="53" x2="42" y2="53" class="double-bond common-bond"></line>
-
-
-                     <!-- Ring III (Bottom Left) - Fully conjugated -->
-                     <line x1="-60" y1="0" x2="-80" y2="30" class="bond common-bond"></line>
-                    <line x1="-80" y1="30" x2="-60" y2="60" class="bond common-bond"></line>
-                    <line x1="-60" y1="60" x2="-30" y2="60" class="bond common-bond"></line>
-                    <line x1="-30" y1="60" x2="-20" y2="30" class="bond common-bond"></line>
-                    <line x1="-20" y1="30" x2="-60" y2="0" class="bond common-bond"></line>
-                     <!-- Double bond in Ring III -->
-                     <line x1="-68" y1="53" x2="-58" y1="53" class="double-bond common-bond"></line>
-
-
-                     <!-- Ring IV (Top Left) -->
-                     <line x1="-60" y1="0" x2="-80" y2="-30" class="bond common-bond"></line>
-                    <line x1="-80" y1="-30" x2="-60" y2="-60" class="bond common-bond"></line>
-                    <line x1="-60" y1="-60" x2="-30" y2="-60" class="bond common-bond"></line>
-                    <line x1="-30" y1="-60" x2="-20" y2="-30" class="bond common-bond"></line>
-                    <line x1="-20" y1="-30" x2="-60" y2="0" class="bond common-bond"></line>
-                      <!-- Double bond in Ring IV -->
-                    <line x1="-32" y1="-53" x2="-42" y1="-53" class="double-bond common-bond"></line>
-
-
-                    <!-- Methine Bridges -->
-                    <line x1="20" y1="-30" x2="30" y2="-50" class="bond common-bond"></line>
-                    <line x1="30" y1="-50" x2="-30" y2="-50" class="bond common-bond"></line>
-                    <line x1="-30" y1="-50" x2="-20" y2="-30" class="bond common-bond"></line>
-
-                    <line x1="20" y1="30" x2="30" y2="50" class="bond common-bond"></line>
-                    <line x1="30" y1="50" x2="-30" y2="50" class="bond common-bond"></line>
-                    <line x1="-30" y1="50" x2="-20" y2="30" class="bond common-bond"></line>
-
-                    <line x1="80" y1="-30" x2="100" y2="-10" class="bond common-bond"></line>
-                    <line x1="100" y2="-10" x2="100" y2="10" class="bond common-bond"></line>
-                    <line x1="100" y2="10" x2="80" y2="30" class="bond common-bond"></line>
-
-                    <line x1="-80" y1="30" x2="-100" y2="10" class="bond common-bond"></line>
-                    <line x1="-100" y2="10" x2="-100" y2="-10" class="bond common-bond"></line>
-                    <line x1="-100" y2="-10" x2="-80" y2="-30" class="bond common-bond"></line>
-
-                    <!-- Conjugated double bonds in bridges (offset lines) -->
-                    <!-- Top bridge -->
-                    <line x1="30" y1="-55" x2="-30" y2="-55" class="double-bond common-bond"></line>
-                    <!-- Bottom bridge -->
-                     <line x1="30" y1="55" x2="-30" y2="55" class="double-bond common-bond"></line>
-                    <!-- Right bridge -->
-                     <line x1="105" y2="-10" x2="105" y2="10" class="double-bond common-bond"></line>
-                    <!-- Left bridge -->
-                     <line x1="-105" y2="10" x2="-105" y2="-10" class="double-bond common-bond"></line>
-
-                </g>
-
-                <!-- Non-common parts for Hemoglobin (Heme) -->
-                <g class="non-common">
-                     <!-- Methyl groups -->
-                    <line x1="30" y1="-60" x2="30" y2="-75" class="bond"></line> <!-- Ring I Beta C -->
-                    <line x1="60" y1="-60" x2="75" y2="-70" class="bond"></line> <!-- Ring I Beta C -->
-
-                    <line x1="-30" y1="60" x2="-30" y2="75" class="bond"></line> <!-- Ring III Beta C -->
-                    <line x1="-60" y1="60" x2="-75" y2="70" class="bond"></line> <!-- Ring III Beta C -->
-
-
-                    <!-- Vinyl group on Ring II Beta C -->
-                    <line x1="30" y1="60" x2="45" y2="70" class="bond"></line>
-                    <line x1="45" y1="70" x2="60" y2="70" class="bond"></line>
-                    <line x1="55" y1="70" x2="70" y2="70" class="double-bond"></line> <!-- Double bond in Vinyl -->
-
-                    <!-- Vinyl group on Ring IV Beta C -->
-                     <line x1="-30" y1="-60" x2="-45" y2="-70" class="bond"></line>
-                    <line x1="-45" y1="-70" x2="-60" y2="-70" class="bond"></line>
-                    <line x1="-55" y1="-70" x2="-70" y2="-70" class="double-bond"></line> <!-- Double bond in Vinyl -->
-
-                    <!-- Propionic acid on Ring II Beta C -->
-                    <line x1="60" y1="60" x2="60" y2="75" class="bond"></line> <!-- CH2 -->
-                    <line x1="60" y1="75" x2="75" y2="85" class="bond"></line> <!-- CH2 -->
-                     <line x1="75" y2="85" x2="90" y2="85" class="bond"></line> <!-- Carboxyl C -->
-                     <line x1="90" y2="85" x2="100" y2="75" class="bond"></line> <!-- O bond -->
-                     <text x="105" y="75" class="atom-label O">O</text>
-                     <line x1="90" y2="85" x2="100" y2="95" class="double-bond"></line> <!-- Carbonyl O -->
-                     <text x="105" y="95" class="atom-label O">O</text>
-
-
-                    <!-- Propionic acid on Ring III Beta C -->
-                     <line x1="-60" y1="60" x2="-60" y2="75" class="bond"></line> <!-- CH2 -->
-                    <line x1="-60" y1="75" x2="-75" y2="85" class="bond"></line> <!-- CH2 -->
-                     <line x1="-75" y2="85" x2="-90" y2="85" class="bond"></line> <!-- Carboxyl C -->
-                     <line x1="-90" y2="85" x2="-100" y2="75" class="bond"></line> <!-- O bond -->
-                     <text x="-105" y="75" class="atom-label O">O</text>
-                     <line x1="-90" y2="85" x2="-100" y2="95" class="double-bond"></line> <!-- Carbonyl O -->
-                     <text x="-105" y="95" class="atom-label O">O</text>
-
-
-                    <!-- Protein attachment point (axial ligand, simplified) -->
-                     <line x1="0" y1="0" x2="0" y2="-100" class="bond non-common"></line> <!-- Bond to axial ligand -->
-                      <text x="0" y="-110" class="atom-label non-common" font-size="12">Protein</text> <!-- Label -->
-
-                </g>
-
-            </svg>
+            <h2>Hemoglobin (Heme b)</h2>
+             <div id="hemoglobin-viewer" class="kekule-viewer" data-widget="Kekule.ChemWidget.Viewer" data-enable-toolbar="false" data-render-type="2D" data-autofit="true" data-predefined-setting="clear" >
+            </div>
         </div>
     </div>
 
-     <p class="instructions" id="instructions">Drag the Hemoglobin (Heme) molecule towards the Chlorophyll molecule.</p>
+     <p class="instructions" id="instructions">Drag the Hemoglobin (Heme b) molecule towards the Chlorophyll a molecule.</p>
+
+    <!-- Molfile data embedded as script tags -->
+    <script type="chemical/x-mdl-molfile" id="heme-molfile">
+HEADER
+  Kekule.js
+
+  0.00000   0.000000    0.000000
+ 39 44  0  0  0  0  0  0  0  0999 V2000
+    -2.0680   -1.2426    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -2.0680    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -0.8254    0.7145    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     0.4172    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     0.4172   -1.2426    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -0.8254   -1.9571    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -0.8254    2.1990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     0.4172    2.9135    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     1.6597    2.1990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     1.6597    0.7145    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -3.3105   -1.9571    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -3.3105    0.7145    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -2.0680    2.9135    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     2.8290    2.9135    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     2.8290    0.7145    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     0.4172   -3.4416    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     1.6597   -4.1561    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     2.8290   -3.4416    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -2.0680   -3.4416    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -0.8254   -4.1561    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -3.3105   -3.4416    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -0.8254   -0.6063    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0
+     0.4172    0.1383    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0
+     0.4172   -1.3808    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0
+    -0.8254   -0.6063    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0
+     0.0000   -0.6063    0.0000 Fe  0  0  0  0  0  0  0  0  0  0  0  0
+    -4.5531   -1.2426    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -4.5531    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     4.0715    2.1990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     4.0715    0.7145    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     0.4172   -4.8020    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+     1.6597   -5.5165    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    -2.0680   -4.8020    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    -0.8254   -5.5165    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+     4.0715   -4.1561    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     4.0715   -5.5161    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     2.8290   -6.2306    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -3.3105    2.1990    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0
+     1.6597    2.9135    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0
+   1  2  1  0  0  0  0
+   2  3  1  0  0  0  0
+   3  4  1  0  0  0  0
+   4  5  1  0  0  0  0
+   5  6  1  0  0  0  0
+   6  1  1  0  0  0  0
+   3  7  1  0  0  0  0
+   7  8  1  0  0  0  0
+   8  9  1  0  0  0  0
+   9 10  1  0  0  0  0
+  10  4  1  0  0  0  0
+  11  6  1  0  0  0  0
+  12  1  1  0  0  0  0
+  13  7  1  0  0  0  0
+  14  9  1  0  0  0  0
+  15 10  1  0  0  0  0
+  16  5  1  0  0  0  0
+  17 16  1  0  0  0  0
+  18 17  1  0  0  0  0
+  19  2  1  0  0  0  0
+  20 19  1  0  0  0  0
+  21 20  1  0  0  0  0
+  22  3  1  0  0  0  0
+  22  4  1  0  0  0  0
+  23  4  1  0  0  0  0
+  23  5  1  0  0  0  0
+  24  5  1  0  0  0  0
+  24  6  1  0  0  0  0
+  25 22  1  0  0  0  0
+  25 23  1  0  0  0  0
+  25 24  1  0  0  0  0
+  26 25  1  0  0  0  0
+  27 11  1  0  0  0  0
+  28 12  1  0  0  0  0
+  29 14  1  0  0  0  0
+  30 15  1  0  0  0  0
+  31 18  2  0  0  0  0
+  31 32  1  0  0  0  0
+  31 33  1  0  0  0  0
+  34 21  2  0  0  0  0
+  34 33  1  0  0  0  0
+  34 34  1  0  0  0  0
+  35 29  1  0  0  0  0
+  36 35  1  0  0  0  0
+  37 36  2  0  0  0  0
+  38  7  1  0  0  0  0
+  39 10  1  0  0  0  0
+M  END
+</script>
+
+    <script type="chemical/x-mdl-molfile" id="chlorophyll-molfile">
+HEADER
+  Kekule.js
+
+  0.00000   0.000000    0.000000
+ 50 56  0  0  0  0  0  0  0  0999 V2000
+    -2.3308   -1.2660    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -2.3308    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -1.1654    0.6330    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     0.0000   -1.2660    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -1.1654   -1.8990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -1.1654    1.9000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     0.0000    2.5330    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     1.1654    1.9000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     1.1654    0.6330    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -3.4962   -1.8990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -3.4962    0.6330    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -2.3308    2.5330    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     2.3308    2.5330    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     2.3308    0.6330    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -1.1654   -3.1650    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -2.3308   -3.8000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     0.0000   -3.8000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -3.4962   -3.1650    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -4.6616   -3.8000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    -1.1654   -0.6330    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0
+     0.0000    0.6330    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0
+     0.0000   -0.6330    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0
+    -1.1654   -0.6330    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0
+    -0.5827    0.0000    0.0000 Mg  0  0  0  0  0  0  0  0  0  0  0  0
+    -4.6616   -1.2660    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     3.4962    1.9000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     3.4962    0.6330    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     1.1654   -3.1650    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     1.1654   -4.4310    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     2.3308   -5.0640    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     3.4962   -4.4310    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     3.4962   -3.1650    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     2.3308   -2.5330    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     4.6616   -5.0640    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     5.8270   -4.4310    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     7.0000   -5.0640    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     8.1654   -4.4310    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     9.3308   -5.0640    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    10.4962   -4.4310    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    11.6616   -5.0640    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    12.8270   -4.4310    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    14.0000   -5.0640    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    15.1654   -4.4310    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    16.3308   -5.0640    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    17.4962   -4.4310    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    18.6616   -5.0640    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    19.8270   -4.4310    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+     2.3308   -6.3300    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+     4.6616   -6.3300    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+   1  2  1  0  0  0  0
+   2  3  1  0  0  0  0
+   3  4  1  0  0  0  0
+   4  5  1  0  0  0  0
+   5  6  1  0  0  0  0
+   6  1  1  0  0  0  0
+   3  7  1  0  0  0  0
+   7  8  1  0  0  0  0
+   8  9  1  0  0  0  0
+   9 10  1  0  0  0  0
+  10  4  1  0  0  0  0
+  11  6  1  0  0  0  0
+  12  1  1  0  0  0  0
+  13  7  1  0  0  0  0
+  14  9  1  0  0  0  0
+  15 10  1  0  0  0  0
+  16  5  1  0  0  0  0
+  17 16  1  0  0  0  0
+  18 17  1  0  0  0  0
+  19  2  1  0  0  0  0
+  20 19  1  0  0  0  0
+  21  3  1  0  0  0  0
+  21  4  1  0  0  0  0
+  22  4  1  0  0  0  0
+  22  5  1  0  0  0  0
+  23  5  1  0  0  0  0
+  23  6  1  0  0  0  0
+  24 21  1  0  0  0  0
+  24 22  1  0  0  0  0
+  24 23  1  0  0  0  0
+  25 24  1  0  0  0  0
+  26 11  1  0  0  0  0
+  27 14  1  0  0  0  0
+  28 15  1  0  0  0  0
+  29 18  1  0  0  0  0
+  30 29  1  0  0  0  0
+  31 30  1  0  0  0  0
+  32 31  1  0  0  0  0
+  33 32  1  0  0  0  0
+  34 33  1  0  0  0  0
+  35 31  1  0  0  0  0
+  36 35  1  0  0  0  0
+  37 36  1  0  0  0  0
+  38 37  1  0  0  0  0
+  39 38  1  0  0  0  0
+  40 39  1  0  0  0  0
+  41 40  1  0  0  0  0
+  42 41  1  0  0  0  0
+  43 42  1  0  0  0  0
+  44 43  1  0  0  0  0
+  45 44  1  0  0  0  0
+  46 45  1  0  0  0  0
+  47 46  1  0  0  0  0
+  48 47  1  0  0  0  0
+  49 30  2  0  0  0  0
+  49 50  1  0  0  0  0
+  49 51  1  0  0  0  0
+  52 32  2  0  0  0  0
+  52 51  1  0  0  0  0
+  53 12  1  0  0  0  0
+  54 13  1  0  0  0  0
+  55 16  1  0  0  0  0
+  56 19  1  0  0  0  0
+M  END
+</script>
 
 
     <script>
-        const hemoglobinContainer = document.getElementById('hemoglobin-container');
-        const chlorophyllContainer = document.getElementById('chlorophyll-container');
-        // Select the metal atom labels for calculating center
-        const chlorophyllMg = chlorophyllContainer.querySelector('.atom-label.Mg');
-        const hemoglobinFe = hemoglobinContainer.querySelector('.atom-label.Fe');
-        const instructions = document.getElementById('instructions');
+        // Ensure Kekule is loaded before using it
+        Kekule.onload(function() {
+            const hemoglobinContainer = document.getElementById('hemoglobin-container');
+            const chlorophyllContainer = document.getElementById('chlorophyll-container');
+            const hemoglobinViewerElem = document.getElementById('hemoglobin-viewer');
+            const chlorophyllViewerElem = document.getElementById('chlorophyll-viewer');
+            const instructions = document.getElementById('instructions');
 
-        let isDragging = false;
-        let initialX;
-        let initialY;
-        let xOffset = 0;
-        let yOffset = 0;
-        let snapped = false;
+            // Get Kekule.js Viewer instances
+            const hemoglobinViewer = Kekule.Widget.getWidget(hemoglobinViewerElem);
+            const chlorophyllViewer = Kekule.Widget.getWidget(chlorophyllViewerElem);
 
-        // Function to get the center coordinates of an element relative to the viewport
-        function getElementCenter(element) {
-            const rect = element.getBoundingClientRect();
-             // For central metal ions (Mg, Fe), using the center of their bounding box is accurate
-            return {
-                x: rect.left + rect.width / 2,
-                y: rect.top + rect.height / 2
-            };
-        }
+            let isDragging = false;
+            let initialX;
+            let initialY;
+            let xOffset = 0;
+            let yOffset = 0;
+            let snapped = false;
 
-        // Function to calculate distance between two points
-        function getDistance(p1, p2) {
-            const dx = p1.x - p2.x;
-            const dy = p1.y - p2.y;
-            return Math.sqrt(dx * dx + dy * dy);
-        }
+             // Load molecules from embedded Molfiles
+            const hemeMolfileId = 'heme-molfile';
+            const chlorophyllMolfileId = 'chlorophyll-molfile';
 
-        function dragStart(e) {
-            if (snapped) return; // Don't drag if already snapped
+             Kekule.IO.loadResourceData('url(#' + hemeMolfileId + ')', function(mol, success) {
+                if (success && mol) {
+                     hemoglobinViewer.setChemObj(mol);
+                      // Find the Fe atom after loading
+                     hemoglobinViewer.getChemObj().atoms.forEach(atom => {
+                         if (atom.getSymbol() === 'Fe') {
+                              hemoglobinViewer.feAtom = atom;
+                         }
+                     });
+                } else {
+                    console.error('Failed to load Heme Molfile');
+                }
+            });
 
-            // Ensure the target is the container itself or something within it
-            if (!hemoglobinContainer.contains(e.target)) {
-                 return;
+            Kekule.IO.loadResourceData('url(#' + chlorophyllMolfileId + ')', function(mol, success) {
+                 if (success && mol) {
+                    chlorophyllViewer.setChemObj(mol);
+                     // Find the Mg atom after loading
+                     chlorophyllViewer.getChemObj().atoms.forEach(atom => {
+                         if (atom.getSymbol() === 'Mg') {
+                              chlorophyllViewer.mgAtom = atom;
+                         }
+                     });
+                } else {
+                    console.error('Failed to load Chlorophyll Molfile');
+                }
+            });
+
+
+            // Function to get the center coordinates of a specific atom relative to the viewport
+            function getAtomViewportPosition(viewer, atom) {
+                 if (!viewer || !atom) return null;
+
+                 // Get the rendering context
+                const render2D = viewer.get anding('2D'); // assuming 2D rendering
+
+                 if (render2D) {
+                     // Get the coordinate of the atom in molecule's internal coordinate system
+                     const atomCoord = atom.getCoord2D();
+                     if (!atomCoord) return null;
+
+                     // Translate molecule coordinate to viewport coordinate
+                     const viewportCoord = render2D.transformMoleculeCoordToViewport(atomCoord);
+
+                     // Get the viewer element's position to make it relative to viewport
+                     const viewerRect = viewer.getElement().getBoundingClientRect();
+
+                     return {
+                         x: viewerRect.left + viewportCoord.x,
+                         y: viewerRect.top + viewportCoord.y
+                     };
+                 }
+                 return null;
             }
 
-            // Handle touch events
-            if (e.type === 'touchstart') {
-                e.preventDefault(); // Prevent default touch behavior (scrolling, zooming)
-                const touch = e.touches[0];
-                 // Calculate initial offsets based on current position
-                 const rect = hemoglobinContainer.getBoundingClientRect();
-                 xOffset = touch.clientX - rect.left;
-                 yOffset = touch.clientY - rect.top;
 
-                 initialX = touch.clientX;
-                 initialY = touch.clientY;
-
-            } else { // Handle mouse events
-                 // Calculate initial offsets based on current position
-                 const rect = hemoglobinContainer.getBoundingClientRect();
-                 xOffset = e.clientX - rect.left;
-                 yOffset = e.clientY - rect.top;
-
-                 initialX = e.clientX;
-                 initialY = e.clientY;
+            // Function to calculate distance between two points
+            function getDistance(p1, p2) {
+                if (!p1 || !p2) return Infinity;
+                const dx = p1.x - p2.x;
+                const dy = p1.y - p2.y;
+                return Math.sqrt(dx * dx + dy * dy);
             }
 
-            isDragging = true;
-            hemoglobinContainer.classList.add('dragging');
+            function dragStart(e) {
+                if (snapped) return; // Don't drag if already snapped
 
-            // Set initial position for absolute positioning if not already set
-            // Or more reliably, ensure position is absolute and record current offsets
-             if (hemoglobinContainer.style.position !== 'absolute') {
-                const rect = hemoglobinContainer.getBoundingClientRect();
-                hemoglobinContainer.style.position = 'absolute';
-                hemoglobinContainer.style.left = rect.left + 'px';
-                hemoglobinContainer.style.top = rect.top + 'px';
-                 // Recalculate offsets based on the just-set absolute position
-                 if (e.type === 'touchstart') {
-                      const touch = e.touches[0];
-                     xOffset = touch.clientX - parseFloat(hemoglobinContainer.style.left);
-                     yOffset = touch.clientY - parseFloat(hemoglobinContainer.style.top);
-                 } else {
-                    xOffset = e.clientX - parseFloat(hemoglobinContainer.style.left);
-                    yOffset = e.clientY - parseFloat(hemoglobinContainer.style.top);
+                // Ensure the target is the container itself or something within it
+                if (!hemoglobinContainer.contains(e.target)) {
+                     return;
+                }
+
+                // Handle touch events
+                if (e.type === 'touchstart') {
+                    e.preventDefault(); // Prevent default touch behavior (scrolling, zooming)
+                    const touch = e.touches[0];
+                     // Calculate initial offsets based on current position
+                     const rect = hemoglobinContainer.getBoundingClientRect();
+                     xOffset = touch.clientX - rect.left;
+                     yOffset = touch.clientY - rect.top;
+
+                     initialX = touch.clientX;
+                     initialY = touch.clientY;
+
+                } else { // Handle mouse events
+                     // Calculate initial offsets based on current position
+                     const rect = hemoglobinContainer.getBoundingClientRect();
+                     xOffset = e.clientX - rect.left;
+                     yOffset = e.clientY - rect.top;
+
+                     initialX = e.clientX;
+                     initialY = e.clientY;
+                }
+
+                isDragging = true;
+                hemoglobinContainer.classList.add('dragging');
+
+                // Set initial position for absolute positioning if not already set
+                // Or more reliably, ensure position is absolute and record current offsets
+                 if (hemoglobinContainer.style.position !== 'absolute') {
+                    const rect = hemoglobinContainer.getBoundingClientRect();
+                    hemoglobinContainer.style.position = 'absolute';
+                    hemoglobinContainer.style.left = rect.left + 'px';
+                    hemoglobinContainer.style.top = rect.top + 'px';
+                     // Recalculate offsets based on the just-set absolute position
+                     if (e.type === 'touchstart') {
+                          const touch = e.touches[0];
+                         xOffset = touch.clientX - parseFloat(hemoglobinContainer.style.left);
+                         yOffset = touch.clientY - parseFloat(hemoglobinContainer.style.top);
+                     } else {
+                        xOffset = e.clientX - parseFloat(hemoglobinContainer.style.left);
+                        yOffset = e.clientY - parseFloat(hemoglobinContainer.style.top);
+                     }
+                }
+
+                 // Bring the dragged element to the front (higher z-index)
+                 hemoglobinContainer.style.zIndex = 100;
+
+            }
+
+            function dragEnd() {
+                if (!isDragging) return;
+
+                isDragging = false;
+                hemoglobinContainer.classList.remove('dragging');
+                 // Reset z-index after drag ends, unless snapped
+                 if (!snapped) {
+                     hemoglobinContainer.style.zIndex = 10; // Or whatever default z-index
+                 }
+
+                // Check for snap condition when dragging ends
+                 checkSnap();
+            }
+
+            function drag(e) {
+                if (!isDragging || snapped) return;
+
+                 // Handle touch events
+                let currentX, currentY;
+                 if (e.type === 'touchmove') {
+                    e.preventDefault(); // Prevent default touch behavior
+                    if (e.touches.length === 0) return; // Should not happen, but safety
+                    currentX = e.touches[0].clientX;
+                    currentY = e.touches[0].clientY;
+                } else { // Handle mouse events
+                    currentX = e.clientX;
+                    currentY = e.clientY;
+                }
+
+                // Calculate new position relative to the initial click/touch point within the element
+                const newLeft = currentX - xOffset;
+                const newTop = currentY - yOffset;
+
+                hemoglobinContainer.style.left = newLeft + 'px';
+                hemoglobinContainer.style.top = newTop + 'px';
+            }
+
+            function checkSnap() {
+                 if (snapped || !chlorophyllViewer.mgAtom || !hemoglobinViewer.feAtom) return;
+
+                 // Get viewport positions of the central metal atoms
+                 const mgPos = getAtomViewportPosition(chlorophyllViewer, chlorophyllViewer.mgAtom);
+                 const fePos = getAtomViewportPosition(hemoglobinViewer, hemoglobinViewer.feAtom);
+
+                 const snapThreshold = 40; // Pixels - adjust based on render size
+
+                 if (mgPos && fePos) {
+                     const distance = getDistance(mgPos, fePos);
+
+                     if (distance < snapThreshold) {
+                         snapped = true;
+                         hemoglobinContainer.classList.add('snapped');
+                          hemoglobinContainer.style.zIndex = 5; // Lower z-index slightly after snapping if desired
+
+                         // Calculate the required translation to align Fe with Mg
+                         const currentFePos = getAtomViewportPosition(hemoglobinViewer, hemoglobinViewer.feAtom);
+                         if (currentFePos) {
+                             const deltaX = mgPos.x - currentFePos.x;
+                             const deltaY = mgPos.y - currentFePos.y;
+
+                             const currentLeft = parseFloat(hemoglobinContainer.style.left);
+                             const currentTop = parseFloat(hemoglobinContainer.style.top);
+
+                             hemoglobinContainer.style.left = (currentLeft + deltaX) + 'px';
+                             hemoglobinContainer.style.top = (currentTop + deltaY) + 'px';
+                         }
+
+
+                         // Trigger highlight
+                         highlightCommonParts();
+
+                         // Update instructions
+                         instructions.textContent = "The common core structures (Porphyrin/Chlorin Ring) are highlighted!";
+                         instructions.style.color = '#004d40'; // Dark green text
+                         instructions.style.fontWeight = 'bold';
+                     }
                  }
             }
 
-             // Bring the dragged element to the front (higher z-index)
-             hemoglobinContainer.style.zIndex = 100;
+            function highlightCommonParts() {
+                 const highlightColor = '#ffc107'; // Amber color
+                 const highlightWidth = 2; // Thicker bond width
 
-        }
+                 // Define a style object
+                 const highlightStyle = new Kekule.Render.StructureDrawingOptionSet();
+                 highlightStyle.setAtomColor(highlightColor);
+                 highlightStyle.setBondColor(highlightColor);
+                 highlightStyle.setBondLineWidth(highlightWidth);
 
-        function dragEnd() {
-            if (!isDragging) return;
+                 // Function to apply style to atoms and their directly connected bonds
+                 function applyHighlightStyleToAtomAndBonds(atom) {
+                     if (!atom) return;
+                     atom.setStyleEx(highlightStyle);
+                     const bonds = atom.getLinkedConnectors();
+                     bonds.forEach(bond => {
+                         bond.setStyleEx(highlightStyle);
+                     });
+                 }
 
-            isDragging = false;
-            hemoglobinContainer.classList.remove('dragging');
-             // Reset z-index after drag ends, unless snapped
-             if (!snapped) {
-                 hemoglobinContainer.style.zIndex = 10; // Or whatever default z-index
-             }
+                 // Highlight the central metal atoms
+                 applyHighlightStyleToAtomAndBonds(chlorophyllViewer.mgAtom);
+                 applyHighlightStyleToAtomAndBonds(hemoglobinViewer.feAtom);
 
+                 // Identifying and highlighting the full porphyrin/chlorin core is more complex
+                 // It would involve traversing connected atoms and bonds from the nitrogens
+                 // For simplicity, let's just highlight the metal and the directly bonded nitrogens for now.
+                 // A more advanced approach would involve ring perception and highlighting those atoms/bonds.
 
-            // Check for snap condition when dragging ends
-             checkSnap();
-        }
+                 // Highlight the nitrogens directly bonded to the metal
+                 const highlightNitrogenStyle = new Kekule.Render.StructureDrawingOptionSet();
+                 highlightNitrogenStyle.setAtomColor('#1a237e'); // Dark blue for N
+                 highlightNitrogenStyle.setAtomFontWeight('bold'); // Make N bold
+                 highlightNitrogenStyle.setBondColor(highlightColor); // Bonds to N
 
-        function drag(e) {
-            if (!isDragging || snapped) return;
+                 function highlightNitrogensAroundMetal(viewer, metalAtom) {
+                     if (!viewer || !metalAtom) return;
+                      const bondedObjs = metalAtom.getLinkedObjs(); // Get objects bonded to the metal
+                      bondedObjs.forEach(obj => {
+                          if (obj.getClassName() === 'Kekule.Atom' && obj.getSymbol() === 'N') {
+                              obj.setStyleEx(highlightNitrogenStyle);
+                               // Also highlight the bonds connecting the metal to these nitrogens
+                               const bondsToN = metalAtom.getConnectedConnectors(obj);
+                               bondsToN.forEach(bond => bond.setStyleEx(highlightStyle));
+                          }
+                      });
+                 }
 
-             // Handle touch events
-            let currentX, currentY;
-             if (e.type === 'touchmove') {
-                e.preventDefault(); // Prevent default touch behavior
-                if (e.touches.length === 0) return; // Should not happen, but safety
-                currentX = e.touches[0].clientX;
-                currentY = e.touches[0].clientY;
-            } else { // Handle mouse events
-                currentX = e.clientX;
-                currentY = e.clientY;
+                highlightNitrogensAroundMetal(chlorophyllViewer, chlorophyllViewer.mgAtom);
+                highlightNitrogensAroundMetal(hemoglobinViewer, hemoglobinViewer.feAtom);
+
+                 // Need to explicitly request repaint after applying styles
+                 chlorophyllViewer.requestRepaint();
+                 hemoglobinViewer.requestRepaint();
+
             }
 
-            // Calculate new position relative to the initial click/touch point within the element
-            const newLeft = currentX - xOffset;
-            const newTop = currentY - yOffset;
+
+             // --- Initial Positioning ---
+             // Set the initial position of the draggable hemoglobin
+             // We need to do this *after* the page layout is stable and viewers are rendered
+            Kekule.Widget.getWidget(hemoglobinViewerElem).renderFinished(function() {
+                 Kekule.Widget.getWidget(chlorophyllViewerElem).renderFinished(function() {
+
+                     const chloroRect = chlorophyllContainer.getBoundingClientRect();
+                     const hemoRect = hemoglobinContainer.getBoundingClientRect();
+                     const containerRect = document.querySelector('.container').getBoundingClientRect();
 
 
-            hemoglobinContainer.style.left = newLeft + 'px';
-            hemoglobinContainer.style.top = newTop + 'px';
+                     // Position Hemoglobin to the right of Chlorophyll initially
+                     // Calculate position relative to the *container* for absolute positioning
+                     const initialLeft = chloroRect.right + 50 - containerRect.left; // 50px gap + relative to container
+                     const initialTop = chloroRect.top - containerRect.top; // Align tops + relative to container
 
-        }
+                     hemoglobinContainer.style.position = 'absolute';
+                     hemoglobinContainer.style.left = initialLeft + 'px';
+                     hemoglobinContainer.style.top = initialTop + 'px';
 
-        function checkSnap() {
-             if (snapped) return;
+                     // Initial state does not have transition
+                     requestAnimationFrame(() => {
+                         hemoglobinContainer.style.transition = 'left 0.5s ease-out, top 0.5s ease-out, box-shadow 0.5s ease';
+                     });
 
-             const mgCenter = getElementCenter(chlorophyllMg);
-             const feCenter = getElementCenter(hemoglobinFe);
-
-             const snapThreshold = 50; // Pixels - Adjusted threshold for refined diagram
-
-             const distance = getDistance(mgCenter, feCenter);
-
-             if (distance < snapThreshold) {
-                 snapped = true;
-                 hemoglobinContainer.classList.add('snapped');
-                  hemoglobinContainer.style.zIndex = 5; // Lower z-index slightly after snapping if desired
-
-                 // Calculate the required translation to align centers
-                 const currentFeCenter = getElementCenter(hemoglobinFe); // Recalculate Fe center in its *current* position
-
-                 // We want the Fe center to move to the Mg center's position
-                 // The target position for the CONTAINER is its current left/top PLUS the difference needed to move the Fe center
-                 const targetLeft = parseFloat(hemoglobinContainer.style.left) + (mgCenter.x - currentFeCenter.x);
-                 const targetTop = parseFloat(hemoglobinContainer.style.top) + (mgCenter.y - currentFeCenter.y);
-
-                 // Apply the target position with transition
-                 hemoglobinContainer.style.left = targetLeft + 'px';
-                 hemoglobinContainer.style.top = targetTop + 'px';
-
-                 // Trigger highlight
-                 highlightCommonParts();
-
-                 // Update instructions
-                 instructions.textContent = "The common core structures (Porphyrin/Chlorin Ring) are highlighted!";
-                 instructions.style.color = '#004d40'; // Dark green text
-                 instructions.style.fontWeight = 'bold';
-             }
-        }
-
-        function highlightCommonParts() {
-            // Select elements with the common classes in BOTH containers
-            const commonElementsChlorophyll = chlorophyllContainer.querySelectorAll('.porphyrin-core.common .common-bond, .porphyrin-core.common .double-bond, .porphyrin-core.common .atom-label');
-            const commonElementsHemoglobin = hemoglobinContainer.querySelectorAll('.porphyrin-core.common .common-bond, .porphyrin-core.common .double-bond, .porphyrin-core.common .atom-label');
-
-            const allCommonElements = [...commonElementsChlorophyll, ...commonElementsHemoglobin];
-
-            // Add flash class to trigger the rapid transition to bright color/width
-            allCommonElements.forEach(el => {
-                el.classList.add('flash');
-            });
-
-            // After a short delay, remove flash and add highlighted class
-            setTimeout(() => {
-                allCommonElements.forEach(el => {
-                    el.classList.remove('flash');
-                    el.classList.add('highlighted');
-                });
-            }, 300); // Flash duration before fading to highlighted state (adjust timing if needed)
-        }
-
-
-         // --- Initial Positioning ---
-         // Set the initial position of the draggable hemoglobin
-         // We need to do this *after* the page layout is stable
-        window.addEventListener('load', () => {
-             const chloroRect = chlorophyllContainer.getBoundingClientRect();
-             const hemoRect = hemoglobinContainer.getBoundingClientRect();
-             const containerRect = document.querySelector('.container').getBoundingClientRect();
-
-
-             // Position Hemoglobin to the right of Chlorophyll initially
-             // Calculate position relative to the *container* for absolute positioning
-             const initialLeft = chloroRect.right + 50 - containerRect.left; // 50px gap + relative to container
-             const initialTop = chloroRect.top - containerRect.top; // Align tops + relative to container
-
-             hemoglobinContainer.style.position = 'absolute';
-             hemoglobinContainer.style.left = initialLeft + 'px';
-             hemoglobinContainer.style.top = initialTop + 'px';
-
-             // Initial state does not have transition - add it after load/positioning
-             requestAnimationFrame(() => {
-                 hemoglobinContainer.style.transition = 'left 0.5s ease-out, top 0.5s ease-out, box-shadow 0.5s ease';
+                 });
              });
 
-        });
+
+            // --- Event Listeners ---
+            // Mouse events
+            hemoglobinContainer.addEventListener('mousedown', dragStart, false);
+            document.addEventListener('mouseup', dragEnd, false); // Listen on document to catch release outside the element
+            document.addEventListener('mousemove', drag, false);
+
+            // Touch events
+            hemoglobinContainer.addEventListener('touchstart', dragStart, { passive: false }); // Use passive: false for preventDefault
+            document.addEventListener('touchend', dragEnd, false); // Listen on document
+            document.addEventListener('touchmove', drag, { passive: false }); // Use passive: false for preventDefault
 
 
-        // --- Event Listeners ---
-        // Mouse events
-        hemoglobinContainer.addEventListener('mousedown', dragStart, false);
-        document.addEventListener('mouseup', dragEnd, false); // Listen on document to catch release outside the element
-        document.addEventListener('mousemove', drag, false);
-
-        // Touch events
-        hemoglobinContainer.addEventListener('touchstart', dragStart, { passive: false }); // Use passive: false for preventDefault
-        document.addEventListener('touchend', dragEnd, false); // Listen on document
-        document.addEventListener('touchmove', drag, { passive: false }); // Use passive: false for preventDefault
-
-
+        }); // End of Kekule.onload
     </script>
 
 </body>
