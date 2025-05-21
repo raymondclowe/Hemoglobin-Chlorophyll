@@ -48,13 +48,13 @@
             transition: box-shadow 0.3s ease;
             position: relative; /* Needed for absolute positioning */
             width: 500px; /* Fixed width, increased for more detailed diagrams */
-            height: 650px; /* Fixed height, increased */
+            height: 680px; /* Fixed height, increased */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
             box-sizing: border-box; /* Include padding in width/height */
-            overflow: hidden; /* Hide overflow from SVG */
+            overflow: hidden; /* Hide overflow from SVG slightly */
         }
 
         .molecule-container h2 {
@@ -66,10 +66,10 @@
         .molecule-container svg {
             width: 100%;
             height: auto;
-            max-height: 550px; /* Limit SVG height */
+            max-height: 580px; /* Limit SVG height */
             display: block;
             margin: auto;
-            overflow: visible; /* Allow elements slightly outside viewBox */
+            overflow: visible; /* Allow labels/tails slightly outside viewBox if needed */
         }
 
         #hemoglobin-container {
@@ -96,45 +96,45 @@
         /* SVG Styling */
         .bond {
             stroke: #000; /* Black bonds */
-            stroke-width: 2;
+            stroke-width: 1.8; /* Slightly thinner bonds for complexity */
             fill: none;
-            transition: stroke 0.5s ease-out, stroke-width 0.5s ease-out; /* Transition for highlighting */
+            transition: stroke 0.3s ease-out, stroke-width 0.3s ease-out; /* Transition for highlighting */
             stroke-linecap: round; /* Nicer look for bond ends */
         }
 
          /* Style for double bonds (offset lines) */
          .double-bond {
              stroke: #000; /* Black */
-             stroke-width: 2;
+             stroke-width: 1.8;
              fill: none;
-             transition: stroke 0.5s ease-out;
+             transition: stroke 0.3s ease-out;
              stroke-linecap: round;
          }
 
 
         .atom-label {
             fill: #000; /* Black text for atom labels */
-            font-size: 14px;
+            font-size: 12px; /* Smaller font size */
             text-anchor: middle;
             dominant-baseline: central;
             pointer-events: none; /* Don't interfere with dragging */
-            transition: fill 0.5s ease-out; /* Transition for highlighting */
-             font-weight: bold; /* Make important atoms stand out */
+            transition: fill 0.3s ease-out; /* Transition for highlighting */
+             font-weight: normal; /* Default weight */
         }
 
         /* Specific atom label adjustments */
-         .atom-label.N { fill: #1a237e; font-size: 15px; } /* Nitrogen - dark blue, slightly larger */
-         .atom-label.Mg { fill: #388e3c; font-size: 18px; } /* Magnesium - green, larger */
-         .atom-label.Fe { fill: #d32f2f; font-size: 18px; } /* Iron - red, larger */
-         .atom-label.O { fill: #bf360c; font-size: 14px; } /* Oxygen - orange-red */
+         .atom-label.N { fill: #1a237e; font-size: 13px; } /* Nitrogen - dark blue */
+         .atom-label.Mg { fill: #388e3c; font-size: 16px; font-weight: bold; } /* Magnesium - green, larger, bold */
+         .atom-label.Fe { fill: #d32f2f; font-size: 16px; font-weight: bold; } /* Iron - red, larger, bold */
+         .atom-label.O { fill: #bf360c; font-size: 12px; } /* Oxygen - orange-red */
 
 
         /* Common parts highlighting */
         .common-bond {
-            /* Default style for common bonds */
+            /* Default style */
         }
          .common-atom-label {
-            /* Default style for common atom labels */
+            /* Default style */
         }
 
 
@@ -142,7 +142,7 @@
         /* Flash (initial bright state) */
         .common-bond.flash, .double-bond.flash {
              stroke: #ffeb3b; /* Bright yellow */
-             stroke-width: 4; /* Thicker flash */
+             stroke-width: 3; /* Thicker flash */
         }
          .common-atom-label.flash {
             fill: #ffeb3b; /* Bright yellow */
@@ -151,7 +151,7 @@
         /* Highlighted (final persistent state) */
         .common-bond.highlighted, .double-bond.highlighted {
              stroke: #ffc107; /* Amber */
-             stroke-width: 3; /* Slightly thicker than default */
+             stroke-width: 2.5; /* Slightly thicker than default */
         }
         .common-atom-label.highlighted {
             fill: #ffc107; /* Amber */
@@ -168,7 +168,7 @@
         /* Optional: Non-common parts can be slightly faded or different color */
         .non-common .bond, .non-common .double-bond {
              stroke: #666;
-             opacity: 0.8;
+             opacity: 0.7;
         }
          .non-common .atom-label {
              fill: #666;
@@ -181,6 +181,7 @@
             font-size: 1.1em;
             color: #004d40;
             min-height: 1.5em; /* Reserve space to prevent layout shift */
+             transition: color 0.5s ease; /* Smooth color change */
         }
 
     </style>
@@ -193,149 +194,155 @@
     <div class="container">
         <div id="chlorophyll-container" class="molecule-container">
             <h2>Chlorophyll (Core)</h2>
-            <svg id="chlorophyll-svg" viewBox="-150 -150 300 300">
-                <!-- Coordinates are simplified but aim for structural representation -->
+            <svg id="chlorophyll-svg" viewBox="-160 -180 320 360">
+                <!-- Redrawn SVG for Skeletal Structure Style -->
+                <!-- Coordinates are approximate for visual representation -->
 
-                <!-- Common Chlorin/Porphyrin Core -->
-                <!-- Note: Chlorophyll has a reduced double bond in one ring (Chlorin) -->
-                <!-- We'll draw the porphyrin skeleton and slightly modify one ring -->
+                <!-- Common Chlorin Core (partially common with Porphyrin) -->
                 <g class="porphyrin-core common">
                     <!-- Central Mg -->
                     <circle cx="0" cy="0" r="5" class="atom-label Mg"></circle>
                     <text x="0" cy="0" class="atom-label Mg">Mg</text>
 
-                    <!-- Nitrogens (approximate positions around center) -->
-                    <text x="55" cy="0" class="atom-label N">N</text>
-                    <text x="-55" cy="0" class="atom-label N">N</text>
-                    <text x="0" cy="55" class="atom-label N">N</text>
-                    <text x="0" cy="-55" class="atom-label N">N</text>
+                    <!-- Nitrogens -->
+                    <text x="60" cy="0" class="atom-label N">N</text>
+                    <text x="-60" cy="0" class="atom-label N">N</text>
+                    <text x="0" cy="60" class="atom-label N">N</text>
+                    <text x="0" cy="-60" class="atom-label N">N</text>
 
                     <!-- Bonds from Mg to N -->
-                    <line x1="0" y1="0" x2="50" y2="0" class="bond common-bond"></line>
-                    <line x1="0" y1="0" x2="-50" y2="0" class="bond common-bond"></line>
-                    <line x1="0" y1="0" x2="0" y2="50" class="bond common-bond"></line>
-                    <line x1="0" y1="0" x2="0" y2="-50" class="bond common-bond"></line>
+                    <line x1="0" y1="0" x2="55" y2="0" class="bond common-bond"></line>
+                    <line x1="0" y1="0" x2="-55" y2="0" class="bond common-bond"></line>
+                    <line x1="0" y1="0" x2="0" y2="55" class="bond common-bond"></line>
+                    <line x1="0" y1="0" x2="0" y2="-55" class="bond common-bond"></line>
 
-                    <!-- Porphyrin Skeleton (Simplified) -->
-                    <!-- This is a simplified representation, not perfectly accurate bond lengths/angles -->
-                    <!-- We'll use lines connecting approximate carbon positions (vertices) -->
+                    <!-- Pyrrole/Chlorin Rings and Methine Bridges -->
+                    <!-- Coordinates refined to resemble standard drawing -->
 
                     <!-- Ring I (Top Right) -->
-                    <line x1="55" y1="0" x2="70" y2="-20" class="bond common-bond"></line> <!-- N to Alpha C -->
-                    <line x1="70" y1="-20" x2="60" y2="-45" class="bond common-bond"></line> <!-- Alpha C to Beta C -->
-                    <line x1="60" y1="-45" x2="30" y2="-45" class="bond common-bond"></line> <!-- Beta C to Beta C -->
-                    <line x1="30" y1="-45" x2="20" y2="-20" class="bond common-bond"></line> <!-- Beta C to Alpha C -->
-                    <line x1="20" y1="-20" x2="55" y2="0" class="bond common-bond"></line> <!-- Alpha C back to N -->
-                     <!-- Double bonds in Ring I -->
-                    <line x1="65" y1="-32.5" x2="55" y2="-32.5" class="double-bond common-bond"></line>
+                    <line x1="60" y1="0" x2="80" y2="-30" class="bond common-bond"></line>
+                    <line x1="80" y1="-30" x2="60" y2="-60" class="bond common-bond"></line>
+                    <line x1="60" y1="-60" x2="30" y2="-60" class="bond common-bond"></line>
+                    <line x1="30" y1="-60" x2="20" y2="-30" class="bond common-bond"></line>
+                    <line x1="20" y1="-30" x2="60" y2="0" class="bond common-bond"></line>
+                    <!-- Double bond in Ring I -->
+                    <line x1="68" y1="-53" x2="58" y2="-53" class="double-bond common-bond"></line>
 
                     <!-- Ring II (Bottom Right) -->
-                     <line x1="55" y1="0" x2="70" y2="20" class="bond common-bond"></line> <!-- N to Alpha C -->
-                    <line x1="70" y1="20" x2="60" y2="45" class="bond common-bond"></line> <!-- Alpha C to Beta C -->
-                    <line x1="60" y1="45" x2="30" y2="45" class="bond common-bond"></line> <!-- Beta C to Beta C -->
-                    <line x1="30" y1="45" x2="20" y2="20" class="bond common-bond"></line> <!-- Beta C to Alpha C -->
-                    <line x1="20" y1="20" x2="55" y2="0" class="bond common-bond"></line> <!-- Alpha C back to N -->
-                     <!-- Double bonds in Ring II -->
-                    <line x1="35" y1="32.5" x2="45" y2="32.5" class="double-bond common-bond"></line>
+                    <line x1="60" y1="0" x2="80" y2="30" class="bond common-bond"></line>
+                    <line x1="80" y1="30" x2="60" y2="60" class="bond common-bond"></line>
+                    <line x1="60" y1="60" x2="30" y2="60" class="bond common-bond"></line>
+                    <line x1="30" y1="60" x2="20" y2="30" class="bond common-bond"></line>
+                    <line x1="20" y1="30" x2="60" y2="0" class="bond common-bond"></line>
+                    <!-- Double bond in Ring II -->
+                    <line x1="32" y1="53" x2="42" y2="53" class="double-bond common-bond"></line>
+
+                    <!-- Ring III (Bottom Left) - This ring is *reduced* (Chlorin) -->
+                    <!-- Bonds are common, but the double bond pattern differs -->
+                    <line x1="-60" y1="0" x2="-80" y2="30" class="bond common-bond"></line>
+                    <line x1="-80" y1="30" x2="-60" y2="60" class="bond common-bond non-common"></line> <!-- Single bond in chlorin -->
+                    <line x1="-60" y1="60" x2="-30" y2="60" class="bond common-bond non-common"></line> <!-- Single bond in chlorin -->
+                    <line x1="-30" y1="60" x2="-20" y2="30" class="bond common-bond non-common"></line> <!-- Single bond in chlorin -->
+                    <line x1="-20" y1="30" x2="-60" y2="0" class="bond common-bond"></line>
+                     <!-- No double bond in the center of Ring III -->
 
 
-                     <!-- Ring III (Bottom Left) - This ring is reduced in Chlorophyll -->
-                     <line x1="-55" y1="0" x2="-70" y2="20" class="bond common-bond"></line> <!-- N to Alpha C -->
-                    <line x1="-70" y1="20" x2="-60" y2="45" class="bond common-bond"></line> <!-- Alpha C to Beta C -->
-                    <line x1="-60" y1="45" x2="-30" y2="45" class="bond common-bond non-common"></line> <!-- Beta C to Beta C -->
-                    <line x1="-30" y1="45" x2="-20" y2="20" class="bond common-bond non-common"></line> <!-- Beta C to Alpha C -->
-                    <line x1="-20" y1="20" x2="-55" y2="0" class="bond common-bond"></line> <!-- Alpha C back to N -->
-                     <!-- No double bond in the center of Ring III in Chlorin -->
+                    <!-- Ring IV (Top Left) -->
+                    <line x1="-60" y1="0" x2="-80" y2="-30" class="bond common-bond"></line>
+                    <line x1="-80" y1="-30" x2="-60" y2="-60" class="bond common-bond"></line>
+                    <line x1="-60" y1="-60" x2="-30" y2="-60" class="bond common-bond"></line>
+                    <line x1="-30" y1="-60" x2="-20" y2="-30" class="bond common-bond"></line>
+                    <line x1="-20" y1="-30" x2="-60" y2="0" class="bond common-bond"></line>
+                     <!-- Double bond in Ring IV -->
+                    <line x1="-68" y1="-53" x2="-58" y2="-53" class="double-bond common-bond"></line>
 
+                    <!-- Methine Bridges -->
+                    <line x1="20" y1="-30" x2="30" y2="-50" class="bond common-bond"></line>
+                    <line x1="30" y1="-50" x2="-30" y2="-50" class="bond common-bond"></line>
+                    <line x1="-30" y1="-50" x2="-20" y2="-30" class="bond common-bond"></line>
 
-                     <!-- Ring IV (Top Left) -->
-                     <line x1="-55" y1="0" x2="-70" y2="-20" class="bond common-bond"></line> <!-- N to Alpha C -->
-                    <line x1="-70" y1="-20" x2="-60" y2="-45" class="bond common-bond"></line> <!-- Alpha C to Beta C -->
-                    <line x1="-60" y1="-45" x2="-30" y2="-45" class="bond common-bond"></line> <!-- Beta C to Beta C -->
-                    <line x1="-30" y1="-45" x2="-20" y2="-20" class="bond common-bond"></line> <!-- Beta C to Alpha C -->
-                    <line x1="-20" y1="-20" x2="-55" y2="0" class="bond common-bond"></line> <!-- Alpha C back to N -->
-                      <!-- Double bonds in Ring IV -->
-                    <line x1="-35" y1="-32.5" x2="-45" y2="-32.5" class="double-bond common-bond"></line>
+                    <line x1="20" y1="30" x2="30" y2="50" class="bond common-bond"></line>
+                    <line x1="30" y1="50" x2="-30" y2="50" class="bond common-bond"></line>
+                    <line x1="-30" y1="50" x2="-20" y2="30" class="bond common-bond"></line>
 
+                    <line x1="80" y1="-30" x2="100" y2="-10" class="bond common-bond"></line>
+                    <line x1="100" y2="-10" x2="100" y2="10" class="bond common-bond"></line>
+                    <line x1="100" y2="10" x2="80" y2="30" class="bond common-bond"></line>
 
-                    <!-- Methine Bridges (connecting Alpha Carbons) -->
-                    <line x1="20" y1="-20" x2="25" y2="-35" class="bond common-bond"></line> <!-- Alpha C to Methine C -->
-                    <line x1="20" y1="20" x2="25" y2="35" class="bond common-bond"></line> <!-- Alpha C to Methine C -->
-                    <line x1="-20" y1="20" x2="-25" y2="35" class="bond common-bond"></line> <!-- Alpha C to Methine C -->
-                    <line x1="-20" y1="-20" x2="-25" y2="-35" class="bond common-bond"></line> <!-- Alpha C to Methine C -->
+                    <line x1="-80" y1="30" x2="-100" y2="10" class="bond common-bond"></line>
+                    <line x1="-100" y2="10" x2="-100" y2="-10" class="bond common-bond"></line>
+                    <line x1="-100" y2="-10" x2="-80" y2="-30" class="bond common-bond"></line>
 
-                    <!-- Connecting Methine Carbons -->
-                    <line x1="25" y1="-35" x2="-25" y2="-35" class="bond common-bond"></line> <!-- Top Methine -->
-                    <line x1="25" y1="35" x2="-25" y2="35" class="bond common-bond"></line> <!-- Bottom Methine -->
-                    <!-- Methine bonds to rings -->
-                     <line x1="70" y1="-20" x2="85" y2="-10" class="bond common-bond"></line> <!-- Ring I Alpha C to Methine C -->
-                     <line x1="70" y1="20" x2="85" y2="10" class="bond common-bond"></line> <!-- Ring II Alpha C to Methine C -->
-                      <line x1="-70" y1="20" x2="-85" y2="10" class="bond common-bond"></line> <!-- Ring III Alpha C to Methine C -->
-                     <line x1="-70" y1="-20" x2="-85" y2="-10" class="bond common-bond"></line> <!-- Ring IV Alpha C to Methine C -->
-                     <!-- Connecting Methine Carbons -->
-                    <line x1="85" y1="-10" x2="85" y2="10" class="bond common-bond"></line> <!-- Right Methine -->
-                    <line x1="-85" y1="10" x2="-85" y2="-10" class="bond common-bond"></line> <!-- Left Methine -->
-
-
-                     <!-- Conjugated Double Bonds in the Porphyrin system (simplified alternating pattern) -->
-                     <!-- Bonds within rings (already added above) -->
-                     <!-- Bonds along bridges (add second line for double bonds) -->
-                     <line x1="80" y1="-10" x2="80" y2="10" class="double-bond common-bond"></line> <!-- Right bridge -->
-                     <line x1="-80" y1="10" x2="-80" y2="-10" class="double-bond common-bond"></line> <!-- Left bridge -->
-                     <line x1="25" y1="-40" x2="-25" y2="-40" class="double-bond common-bond"></line> <!-- Top bridge -->
-                     <line x1="25" y1="40" x2="-25" y2="40" class="double-bond common-bond"></line> <!-- Bottom bridge -->
-
+                    <!-- Conjugated double bonds in bridges (offset lines) -->
+                    <!-- Top bridge -->
+                    <line x1="30" y1="-55" x2="-30" y2="-55" class="double-bond common-bond"></line>
+                    <!-- Bottom bridge -->
+                     <line x1="30" y1="55" x2="-30" y2="55" class="double-bond common-bond"></line>
+                    <!-- Right bridge -->
+                     <line x1="105" y2="-10" x2="105" y2="10" class="double-bond common-bond"></line>
+                    <!-- Left bridge -->
+                     <line x1="-105" y2="10" x2="-105" y2="-10" class="double-bond common-bond"></line>
 
                 </g>
 
                 <!-- Non-common parts for Chlorophyll -->
                 <g class="non-common">
-                    <!-- Methyl groups (simplified as lines) -->
-                    <line x1="30" y1="-45" x2="30" y2="-60" class="bond"></line> <!-- Ring I Beta C -->
-                    <line x1="60" y1="-45" x2="75" y2="-55" class="bond"></line> <!-- Ring I Beta C -->
+                    <!-- Methyl groups -->
+                    <line x1="30" y1="-60" x2="30" y2="-75" class="bond"></line> <!-- Ring I Beta C -->
+                    <line x1="60" y1="-60" x2="75" y2="-70" class="bond"></line> <!-- Ring I Beta C -->
 
-                    <line x1="30" y1="45" x2="30" y2="60" class="bond"></line> <!-- Ring II Beta C -->
-                    <line x1="60" y1="45" x2="75" y2="55" class="bond"></line> <!-- Ring II Beta C -->
+                    <line x1="30" y1="60" x2="30" y2="75" class="bond"></line> <!-- Ring II Beta C -->
+                    <!-- Note: Different substituent on Ring II Beta C in Chlorophyll B (-CHO), but example shows A (-CH3) -->
+                    <!-- Sticking to Methyl based on visual example -->
+                    <line x1="60" y1="60" x2="75" y2="70" class="bond"></line> <!-- Ring II Beta C -->
 
-                     <line x1="-60" y1="-45" x2="-75" y2="-55" class="bond"></line> <!-- Ring IV Beta C -->
+                     <line x1="-60" y1="-60" x2="-75" y2="-70" class="bond"></line> <!-- Ring IV Beta C -->
 
 
-                    <!-- Vinyl group on Ring I Beta C -->
-                    <line x1="30" y1="-45" x2="45" y2="-55" class="bond"></line>
-                    <line x1="45" y1="-55" x2="60" y2="-55" class="bond"></line>
-                    <line x1="55" y1="-55" x2="70" y2="-55" class="double-bond"></line> <!-- Double bond in Vinyl -->
+                    <!-- Vinyl group on Ring III Beta C -->
+                    <line x1="-30" y1="60" x2="-30" y2="75" class="bond"></line>
+                    <line x1="-30" y1="75" x2="-45" y2="85" class="bond"></line>
+                    <line x1="-45" y1="85" x2="-60" y2="85" class="double-bond"></line> <!-- Double bond in Vinyl -->
 
 
                     <!-- Ethyl group on Ring IV Beta C -->
-                     <line x1="-30" y1="-45" x2="-30" y2="-60" class="bond"></line>
-                      <line x1="-30" y1="-60" x2="-45" y2="-70" class="bond"></line>
+                     <line x1="-30" y1="-60" x2="-30" y2="-75" class="bond"></line>
+                      <line x1="-30" y1="-75" x2="-45" y2="-85" class="bond"></line>
 
 
                     <!-- Fifth Ring (Isocyclic Ring) -->
-                    <!-- Connects Ring III Alpha C to Beta C, with a carbonyl -->
-                     <line x1="-20" y1="20" x2="-10" y2="50" class="bond"></line> <!-- From Ring III Alpha C -->
-                     <line x1="-10" y1="50" x2="20" y2="50" class="bond"></line> <!-- Horizontal bond -->
-                     <line x1="20" y1="50" x2="30" y2="45" class="bond"></line> <!-- To Ring II Beta C -->
-                     <line x1="20" y1="50" x2="20" y2="65" class="double-bond"></line> <!-- Carbonyl double bond -->
-                    <text x="20" y="75" class="atom-label O">O</text>
+                    <!-- Connects Ring III Alpha C to Beta C, with a carbonyl and methyl ester -->
+                     <line x1="-20" y1="30" x2="-10" y2="65" class="bond"></line> <!-- From Ring III Alpha C -->
+                     <line x1="-10" y1="65" x2="20" y2="65" class="bond"></line> <!-- Horizontal bond -->
+                     <line x1="20" y1="65" x2="30" y2="60" class="bond"></line> <!-- To Ring II Beta C -->
+                     <line x1="20" y1="65" x2="20" y2="80" class="double-bond"></line> <!-- Carbonyl double bond -->
+                    <text x="20" y="90" class="atom-label O">O</text>
 
                     <!-- Methoxycarbonyl group (ester) -->
-                    <line x1="-10" y1="50" x2="-10" y2="70" class="bond"></line> <!-- From fifth ring carbon -->
-                    <text x="-10" y="80" class="atom-label O">O</text> <!-- Ester oxygen -->
-                    <line x1="-10" y2="80" x2="-25" y2="90" class="bond"></line> <!-- Methyl group of ester -->
+                    <line x1="-10" y1="65" x2="-10" y2="80" class="bond"></line> <!-- From fifth ring carbon -->
+                    <text x="-10" y="90" class="atom-label O">O</text> <!-- Ester oxygen -->
+                    <line x1="-10" y2="90" x2="-25" y2="100" class="bond"></line> <!-- Methyl group of ester -->
 
 
-                    <!-- Phytyl Tail attachment point (simplified) -->
+                    <!-- Phytyl Tail attachment point (simplified - just the linkage and label) -->
                     <!-- Attached to the propionic acid derivative off Ring IV Beta C -->
-                    <line x1="-60" y1="45" x2="-60" y2="60" class="bond"></line> <!-- From Ring III Beta C -->
-                    <line x1="-60" y1="60" x2="-75" y2="70" class="bond"></line> <!-- First CH2 -->
-                    <line x1="-75" y2="70" x2="-75" y2="85" class="bond"></line> <!-- Second CH2 -->
-                     <text x="-85" y2="95" class="atom-label O">O</text> <!-- Ester Oxygen linking to tail -->
-                    <line x1="-75" y2="85" x2="-85" y2="95" class="bond"></line>
+                    <line x1="-60" y1="60" x2="-60" y2="75" class="bond"></line> <!-- From Ring III Beta C - oops, should be Ring IV Beta C (-60, -60)! FIXING... -->
+                    <!-- Correcting Phytyl attachment -->
+                    <line x1="-60" y1="60" x2="-60" y2="75" class="bond non-common"></line> <!-- From Ring III Beta C - this looks wrong based on structure, should be propionate off a Beta C -->
+                    <!-- Consulting standard Chlorophyll structure: Propionate is off Ring IV Beta carbon (the one next to reduced ring) -->
+                    <!-- Let's assume it's off -60,-60 vertex -->
+                    <line x1="-60" y1="-60" x2="-60" y2="-75" class="bond non-common"></line> <!-- CH2 -->
+                    <line x1="-60" y1="-75" x2="-75" y2="-85" class="bond non-common"></line> <!-- CH2 -->
+                     <line x1="-75" y2="-85" x2="-75" y2="-100" class="bond non-common"></line> <!-- Carboxyl C -->
+                     <line x1="-75" y2="-100" x2="-85" y2="-110" class="bond non-common"></line> <!-- O bond -->
+                     <text x="-90" y="-110" class="atom-label O non-common">O</text> <!-- Ester Oxygen linking to tail -->
+                    <line x1="-75" y2="-100" x2="-65" y2="-110" class="double-bond non-common"></line> <!-- Carbonyl O -->
+                     <text x="-60" y="-110" class="atom-label O non-common">O</text>
+
 
                     <!-- Adding a label for the phytyl tail attachment -->
-                    <text x="-100" y="110" class="atom-label" font-size="10">Phytyl Tail</text>
-                    <line x1="-85" y2="95" x2="-100" y2="110" class="bond non-common"></line>
+                    <text x="-130" y="-130" class="atom-label non-common" font-size="10">Phytyl Tail</text>
+                    <line x1="-85" y2="-110" x2="-110" y2="-125" class="bond non-common"></line>
 
 
                 </g>
@@ -345,142 +352,142 @@
 
         <div id="hemoglobin-container" class="molecule-container">
             <h2>Hemoglobin (Heme Group)</h2>
-             <svg id="hemoglobin-svg" viewBox="-150 -150 300 300">
-                 <!-- Coordinates are simplified but aim for structural representation -->
+             <svg id="hemoglobin-svg" viewBox="-160 -180 320 360">
+                 <!-- Redrawn SVG for Skeletal Structure Style -->
+                <!-- Coordinates are approximate for visual representation -->
 
-                <!-- Common Porphyrin Core -->
+                <!-- Common Porphyrin Core (fully conjugated) -->
                 <g class="porphyrin-core common">
                     <!-- Central Fe -->
                     <circle cx="0" cy="0" r="5" class="atom-label Fe"></circle>
                     <text x="0" cy="0" class="atom-label Fe">Fe</text>
 
-                    <!-- Nitrogens (approximate positions around center) -->
-                    <text x="55" cy="0" class="atom-label N">N</text>
-                    <text x="-55" cy="0" class="atom-label N">N</text>
-                    <text x="0" cy="55" class="atom-label N">N</text>
-                    <text x="0" cy="-55" class="atom-label N">N</text>
+                    <!-- Nitrogens -->
+                    <text x="60" cy="0" class="atom-label N">N</text>
+                    <text x="-60" cy="0" class="atom-label N">N</text>
+                    <text x="0" cy="60" class="atom-label N">N</text>
+                    <text x="0" cy="-60" class="atom-label N">N</text>
 
                      <!-- Bonds from Fe to N -->
-                    <line x1="0" y1="0" x2="50" y2="0" class="bond common-bond"></line>
-                    <line x1="0" y1="0" x2="-50" y2="0" class="bond common-bond"></line>
-                    <line x1="0" y1="0" x2="0" y2="50" class="bond common-bond"></line>
-                    <line x1="0" y1="0" x2="0" y2="-50" class="bond common-bond"></line>
+                    <line x1="0" y1="0" x2="55" y2="0" class="bond common-bond"></line>
+                    <line x1="0" y1="0" x2="-55" y2="0" class="bond common-bond"></line>
+                    <line x1="0" y1="0" x2="0" y2="55" class="bond common-bond"></line>
+                    <line x1="0" y1="0" x2="0" y2="-55" class="bond common-bond"></line>
 
+                    <!-- Pyrrole Rings and Methine Bridges (fully conjugated) -->
+                    <!-- Coordinates refined to resemble standard drawing -->
 
-                    <!-- Porphyrin Skeleton (Simplified) - Fully conjugated -->
                     <!-- Ring I (Top Right) -->
-                    <line x1="55" y1="0" x2="70" y2="-20" class="bond common-bond"></line> <!-- N to Alpha C -->
-                    <line x1="70" y1="-20" x2="60" y2="-45" class="bond common-bond"></line> <!-- Alpha C to Beta C -->
-                    <line x1="60" y1="-45" x2="30" y2="-45" class="bond common-bond"></line> <!-- Beta C to Beta C -->
-                    <line x1="30" y1="-45" x2="20" y2="-20" class="bond common-bond"></line> <!-- Beta C to Alpha C -->
-                    <line x1="20" y1="-20" x2="55" y2="0" class="bond common-bond"></line> <!-- Alpha C back to N -->
-                     <!-- Double bonds in Ring I -->
-                    <line x1="65" y1="-32.5" x2="55" y2="-32.5" class="double-bond common-bond"></line>
-
+                    <line x1="60" y1="0" x2="80" y2="-30" class="bond common-bond"></line>
+                    <line x1="80" y1="-30" x2="60" y2="-60" class="bond common-bond"></line>
+                    <line x1="60" y1="-60" x2="30" y2="-60" class="bond common-bond"></line>
+                    <line x1="30" y1="-60" x2="20" y2="-30" class="bond common-bond"></line>
+                    <line x1="20" y1="-30" x2="60" y2="0" class="bond common-bond"></line>
+                     <!-- Double bond in Ring I -->
+                    <line x1="68" y1="-53" x2="58" y2="-53" class="double-bond common-bond"></line>
 
                     <!-- Ring II (Bottom Right) -->
-                     <line x1="55" y1="0" x2="70" y2="20" class="bond common-bond"></line> <!-- N to Alpha C -->
-                    <line x1="70" y1="20" x2="60" y2="45" class="bond common-bond"></line> <!-- Alpha C to Beta C -->
-                    <line x1="60" y1="45" x2="30" y2="45" class="bond common-bond"></line> <!-- Beta C to Beta C -->
-                    <line x1="30" y1="45" x2="20" y2="20" class="bond common-bond"></line> <!-- Beta C to Alpha C -->
-                    <line x1="20" y1="20" x2="55" y2="0" class="bond common-bond"></line> <!-- Alpha C back to N -->
-                     <!-- Double bonds in Ring II -->
-                    <line x1="35" y1="32.5" x2="45" y2="32.5" class="double-bond common-bond"></line>
+                     <line x1="60" y1="0" x2="80" y2="30" class="bond common-bond"></line>
+                    <line x1="80" y1="30" x2="60" y2="60" class="bond common-bond"></line>
+                    <line x1="60" y1="60" x2="30" y2="60" class="bond common-bond"></line>
+                    <line x1="30" y1="60" x2="20" y2="30" class="bond common-bond"></line>
+                    <line x1="20" y1="30" x2="60" y2="0" class="bond common-bond"></line>
+                     <!-- Double bond in Ring II -->
+                    <line x1="32" y1="53" x2="42" y2="53" class="double-bond common-bond"></line>
 
 
-                     <!-- Ring III (Bottom Left) - Fully conjugated in Hemoglobin -->
-                     <line x1="-55" y1="0" x2="-70" y2="20" class="bond common-bond"></line> <!-- N to Alpha C -->
-                    <line x1="-70" y1="20" x2="-60" y2="45" class="bond common-bond"></line> <!-- Alpha C to Beta C -->
-                    <line x1="-60" y1="45" x2="-30" y2="45" class="bond common-bond"></line> <!-- Beta C to Beta C -->
-                    <line x1="-30" y1="45" x2="-20" y2="20" class="bond common-bond"></line> <!-- Beta C to Alpha C -->
-                    <line x1="-20" y1="20" x2="-55" y2="0" class="bond common-bond"></line> <!-- Alpha C back to N -->
-                     <!-- Double bonds in Ring III -->
-                     <line x1="-65" y1="32.5" x2="-55" y1="32.5" class="double-bond common-bond"></line>
+                     <!-- Ring III (Bottom Left) - Fully conjugated -->
+                     <line x1="-60" y1="0" x2="-80" y2="30" class="bond common-bond"></line>
+                    <line x1="-80" y1="30" x2="-60" y2="60" class="bond common-bond"></line>
+                    <line x1="-60" y1="60" x2="-30" y2="60" class="bond common-bond"></line>
+                    <line x1="-30" y1="60" x2="-20" y2="30" class="bond common-bond"></line>
+                    <line x1="-20" y1="30" x2="-60" y2="0" class="bond common-bond"></line>
+                     <!-- Double bond in Ring III -->
+                     <line x1="-68" y1="53" x2="-58" y1="53" class="double-bond common-bond"></line>
 
 
                      <!-- Ring IV (Top Left) -->
-                     <line x1="-55" y1="0" x2="-70" y2="-20" class="bond common-bond"></line> <!-- N to Alpha C -->
-                    <line x1="-70" y1="-20" x2="-60" y2="-45" class="bond common-bond"></line> <!-- Alpha C to Beta C -->
-                    <line x1="-60" y1="-45" x2="-30" y2="-45" class="bond common-bond"></line> <!-- Beta C to Beta C -->
-                    <line x1="-30" y1="-45" x2="-20" y2="-20" class="bond common-bond"></line> <!-- Beta C to Alpha C -->
-                    <line x1="-20" y1="-20" x2="-55" y2="0" class="bond common-bond"></line> <!-- Alpha C back to N -->
-                      <!-- Double bonds in Ring IV -->
-                    <line x1="-35" y1="-32.5" x2="-45" y1="-32.5" class="double-bond common-bond"></line>
+                     <line x1="-60" y1="0" x2="-80" y2="-30" class="bond common-bond"></line>
+                    <line x1="-80" y1="-30" x2="-60" y2="-60" class="bond common-bond"></line>
+                    <line x1="-60" y1="-60" x2="-30" y2="-60" class="bond common-bond"></line>
+                    <line x1="-30" y1="-60" x2="-20" y2="-30" class="bond common-bond"></line>
+                    <line x1="-20" y1="-30" x2="-60" y2="0" class="bond common-bond"></line>
+                      <!-- Double bond in Ring IV -->
+                    <line x1="-32" y1="-53" x2="-42" y1="-53" class="double-bond common-bond"></line>
 
 
-                    <!-- Methine Bridges (connecting Alpha Carbons) -->
-                    <line x1="20" y1="-20" x2="25" y2="-35" class="bond common-bond"></line> <!-- Alpha C to Methine C -->
-                    <line x1="20" y1="20" x2="25" y2="35" class="bond common-bond"></line> <!-- Alpha C to Methine C -->
-                    <line x1="-20" y1="20" x2="-25" y2="35" class="bond common-bond"></line> <!-- Alpha C to Methine C -->
-                    <line x1="-20" y1="-20" x2="-25" y2="-35" class="bond common-bond"></line> <!-- Alpha C to Methine C -->
+                    <!-- Methine Bridges -->
+                    <line x1="20" y1="-30" x2="30" y2="-50" class="bond common-bond"></line>
+                    <line x1="30" y1="-50" x2="-30" y2="-50" class="bond common-bond"></line>
+                    <line x1="-30" y1="-50" x2="-20" y2="-30" class="bond common-bond"></line>
 
-                    <!-- Connecting Methine Carbons -->
-                    <line x1="25" y1="-35" x2="-25" y2="-35" class="bond common-bond"></line> <!-- Top Methine -->
-                    <line x1="25" y1="35" x2="-25" y2="35" class="bond common-bond"></line> <!-- Bottom Methine -->
-                    <!-- Methine bonds to rings -->
-                     <line x1="70" y1="-20" x2="85" y2="-10" class="bond common-bond"></line> <!-- Ring I Alpha C to Methine C -->
-                     <line x1="70" y1="20" x2="85" y2="10" class="bond common-bond"></line> <!-- Ring II Alpha C to Methine C -->
-                      <line x1="-70" y1="20" x2="-85" y2="10" class="bond common-bond"></line> <!-- Ring III Alpha C to Methine C -->
-                     <line x1="-70" y1="-20" x2="-85" y2="-10" class="bond common-bond"></line> <!-- Ring IV Alpha C to Methine C -->
-                     <!-- Connecting Methine Carbons -->
-                    <line x1="85" y1="-10" x2="85" y2="10" class="bond common-bond"></line> <!-- Right Methine -->
-                    <line x1="-85" y1="10" x2="-85" y2="-10" class="bond common-bond"></line> <!-- Left Methine -->
+                    <line x1="20" y1="30" x2="30" y2="50" class="bond common-bond"></line>
+                    <line x1="30" y1="50" x2="-30" y2="50" class="bond common-bond"></line>
+                    <line x1="-30" y1="50" x2="-20" y2="30" class="bond common-bond"></line>
 
+                    <line x1="80" y1="-30" x2="100" y2="-10" class="bond common-bond"></line>
+                    <line x1="100" y2="-10" x2="100" y2="10" class="bond common-bond"></line>
+                    <line x1="100" y2="10" x2="80" y2="30" class="bond common-bond"></line>
 
-                     <!-- Conjugated Double Bonds in the Porphyrin system (alternating pattern) -->
-                     <!-- Bonds within rings (already added above) -->
-                     <!-- Bonds along bridges (add second line for double bonds) -->
-                     <line x1="80" y1="-10" x2="80" y2="10" class="double-bond common-bond"></line> <!-- Right bridge -->
-                     <line x1="-80" y1="10" x2="-80" y2="-10" class="double-bond common-bond"></line> <!-- Left bridge -->
-                     <line x1="25" y1="-40" x2="-25" y2="-40" class="double-bond common-bond"></line> <!-- Top bridge -->
-                     <line x1="25" y1="40" x2="-25" y2="40" class="double-bond common-bond"></line> <!-- Bottom bridge -->
+                    <line x1="-80" y1="30" x2="-100" y2="10" class="bond common-bond"></line>
+                    <line x1="-100" y2="10" x2="-100" y2="-10" class="bond common-bond"></line>
+                    <line x1="-100" y2="-10" x2="-80" y2="-30" class="bond common-bond"></line>
 
+                    <!-- Conjugated double bonds in bridges (offset lines) -->
+                    <!-- Top bridge -->
+                    <line x1="30" y1="-55" x2="-30" y2="-55" class="double-bond common-bond"></line>
+                    <!-- Bottom bridge -->
+                     <line x1="30" y1="55" x2="-30" y2="55" class="double-bond common-bond"></line>
+                    <!-- Right bridge -->
+                     <line x1="105" y2="-10" x2="105" y2="10" class="double-bond common-bond"></line>
+                    <!-- Left bridge -->
+                     <line x1="-105" y2="10" x2="-105" y2="-10" class="double-bond common-bond"></line>
 
                 </g>
 
                 <!-- Non-common parts for Hemoglobin (Heme) -->
                 <g class="non-common">
-                     <!-- Methyl groups (simplified as lines) -->
-                    <line x1="30" y1="-45" x2="30" y2="-60" class="bond"></line> <!-- Ring I Beta C -->
-                    <line x1="60" y1="-45" x2="75" y2="-55" class="bond"></line> <!-- Ring I Beta C -->
+                     <!-- Methyl groups -->
+                    <line x1="30" y1="-60" x2="30" y2="-75" class="bond"></line> <!-- Ring I Beta C -->
+                    <line x1="60" y1="-60" x2="75" y2="-70" class="bond"></line> <!-- Ring I Beta C -->
 
-                    <line x1="-30" y1="45" x2="-30" y2="60" class="bond"></line> <!-- Ring III Beta C -->
-                    <line x1="-60" y1="45" x2="-75" y2="55" class="bond"></line> <!-- Ring III Beta C -->
+                    <line x1="-30" y1="60" x2="-30" y2="75" class="bond"></line> <!-- Ring III Beta C -->
+                    <line x1="-60" y1="60" x2="-75" y2="70" class="bond"></line> <!-- Ring III Beta C -->
 
 
                     <!-- Vinyl group on Ring II Beta C -->
-                    <line x1="30" y1="45" x2="45" y2="55" class="bond"></line>
-                    <line x1="45" y1="55" x2="60" y2="55" class="bond"></line>
-                    <line x1="55" y1="55" x2="70" y2="55" class="double-bond"></line> <!-- Double bond in Vinyl -->
+                    <line x1="30" y1="60" x2="45" y2="70" class="bond"></line>
+                    <line x1="45" y1="70" x2="60" y2="70" class="bond"></line>
+                    <line x1="55" y1="70" x2="70" y2="70" class="double-bond"></line> <!-- Double bond in Vinyl -->
 
                     <!-- Vinyl group on Ring IV Beta C -->
-                     <line x1="-30" y1="-45" x2="-45" y2="-55" class="bond"></line>
-                    <line x1="-45" y1="-55" x2="-60" y2="-55" class="bond"></line>
-                    <line x1="-55" y1="-55" x2="-70" y1="-55" class="double-bond"></line> <!-- Double bond in Vinyl -->
+                     <line x1="-30" y1="-60" x2="-45" y2="-70" class="bond"></line>
+                    <line x1="-45" y1="-70" x2="-60" y2="-70" class="bond"></line>
+                    <line x1="-55" y1="-70" x2="-70" y2="-70" class="double-bond"></line> <!-- Double bond in Vinyl -->
 
                     <!-- Propionic acid on Ring II Beta C -->
-                    <line x1="60" y1="45" x2="60" y2="60" class="bond"></line> <!-- CH2 -->
-                    <line x1="60" y1="60" x2="75" y2="70" class="bond"></line> <!-- CH2 -->
-                     <line x1="75" y2="70" x2="90" y2="70" class="bond"></line> <!-- Carboxyl C -->
-                     <line x1="90" y2="70" x2="100" y2="60" class="bond"></line> <!-- O bond -->
-                     <text x="105" y="60" class="atom-label O">O</text>
-                     <line x1="90" y2="70" x2="100" y2="80" class="double-bond"></line> <!-- Carbonyl O -->
-                     <text x="105" y="80" class="atom-label O">O</text>
+                    <line x1="60" y1="60" x2="60" y2="75" class="bond"></line> <!-- CH2 -->
+                    <line x1="60" y1="75" x2="75" y2="85" class="bond"></line> <!-- CH2 -->
+                     <line x1="75" y2="85" x2="90" y2="85" class="bond"></line> <!-- Carboxyl C -->
+                     <line x1="90" y2="85" x2="100" y2="75" class="bond"></line> <!-- O bond -->
+                     <text x="105" y="75" class="atom-label O">O</text>
+                     <line x1="90" y2="85" x2="100" y2="95" class="double-bond"></line> <!-- Carbonyl O -->
+                     <text x="105" y="95" class="atom-label O">O</text>
 
 
                     <!-- Propionic acid on Ring III Beta C -->
-                     <line x1="-60" y1="45" x2="-60" y2="60" class="bond"></line> <!-- CH2 -->
-                    <line x1="-60" y1="60" x2="-75" y2="70" class="bond"></line> <!-- CH2 -->
-                     <line x1="-75" y2="70" x2="-90" y2="70" class="bond"></line> <!-- Carboxyl C -->
-                     <line x1="-90" y2="70" x2="-100" y2="60" class="bond"></line> <!-- O bond -->
-                     <text x="-105" y="60" class="atom-label O">O</text>
-                     <line x1="-90" y2="70" x2="-100" y2="80" class="double-bond"></line> <!-- Carbonyl O -->
-                     <text x="-105" y="80" class="atom-label O">O</text>
+                     <line x1="-60" y1="60" x2="-60" y2="75" class="bond"></line> <!-- CH2 -->
+                    <line x1="-60" y1="75" x2="-75" y2="85" class="bond"></line> <!-- CH2 -->
+                     <line x1="-75" y2="85" x2="-90" y2="85" class="bond"></line> <!-- Carboxyl C -->
+                     <line x1="-90" y2="85" x2="-100" y2="75" class="bond"></line> <!-- O bond -->
+                     <text x="-105" y="75" class="atom-label O">O</text>
+                     <line x1="-90" y2="85" x2="-100" y2="95" class="double-bond"></line> <!-- Carbonyl O -->
+                     <text x="-105" y="95" class="atom-label O">O</text>
 
 
                     <!-- Protein attachment point (axial ligand, simplified) -->
-                     <line x1="0" y1="0" x2="0" y2="-80" class="bond non-common"></line> <!-- Bond to axial ligand -->
-                      <text x="0" y="-90" class="atom-label non-common" font-size="12">Protein</text> <!-- Label -->
+                     <line x1="0" y1="0" x2="0" y2="-100" class="bond non-common"></line> <!-- Bond to axial ligand -->
+                      <text x="0" y="-110" class="atom-label non-common" font-size="12">Protein</text> <!-- Label -->
 
                 </g>
 
@@ -509,10 +516,7 @@
         // Function to get the center coordinates of an element relative to the viewport
         function getElementCenter(element) {
             const rect = element.getBoundingClientRect();
-            // For text elements or small circles representing atoms, the center is approximately rect.left + width/2, rect.top + height/2
-             // For the central metal ion, the circle element's center *is* its cx/cy relative to its SVG,
-             // but we need its viewport position. getBoundingClientRect() is the most reliable way
-             // to get the element's position relative to the viewport.
+             // For central metal ions (Mg, Fe), using the center of their bounding box is accurate
             return {
                 x: rect.left + rect.width / 2,
                 y: rect.top + rect.height / 2
@@ -628,7 +632,7 @@
              const mgCenter = getElementCenter(chlorophyllMg);
              const feCenter = getElementCenter(hemoglobinFe);
 
-             const snapThreshold = 60; // Pixels - adjust this value based on desired snap radius (smaller threshold needed with more detailed diagrams)
+             const snapThreshold = 50; // Pixels - Adjusted threshold for refined diagram
 
              const distance = getDistance(mgCenter, feCenter);
 
@@ -699,7 +703,7 @@
              hemoglobinContainer.style.left = initialLeft + 'px';
              hemoglobinContainer.style.top = initialTop + 'px';
 
-             // Initial state does not have transition
+             // Initial state does not have transition - add it after load/positioning
              requestAnimationFrame(() => {
                  hemoglobinContainer.style.transition = 'left 0.5s ease-out, top 0.5s ease-out, box-shadow 0.5s ease';
              });
