@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chlorophyll vs Hemoglobin: A Structural Comparison</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(to bottom right, #e0f7fa, #80cbc4); /* Cool blue-green gradient */
+            color: #333;
+            overflow: hidden; /* Prevent scrollbars if elements go slightly out */
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, p {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #004d40;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align top initially */
+            gap: 50px; /* Space between molecules */
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 20px;
+        }
+
+        .molecule-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: box-shadow 0.3s ease;
+            position: relative; /* Needed for absolute positioning of title */
+            width: 450px; /* Fixed width */
+            height: 550px; /* Fixed height, adjust based on SVG size */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            box-sizing: border-box; /* Include padding in width/height */
+        }
+
+        .molecule-container h2 {
+            color: #00695c;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .molecule-container svg {
+            width: 100%;
+            height: auto;
+            max-height: 450px; /* Limit SVG height */
+            /* Ensure SVG content is centered if smaller than container */
+            display: block;
+            margin: auto;
+        }
+
+        #hemoglobin-container {
+            cursor: grab;
+            position: absolute; /* Make draggable element absolute */
+            z-index: 10; /* Ensure it's on top when dragging */
+            left: auto; /* Will be set by JS */
+            top: auto; /* Will be set by JS */
+            /* Remove default positioning */
+            transform: none !important; /* Override flex/grid positioning initially */
+        }
+
+        #hemoglobin-container.dragging {
+            cursor: grabbing;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        #hemoglobin-container.snapped {
+             cursor: default;
+             transition: left 0.5s ease-out, top 0.5s ease-out, box-shadow 0.5s ease; /* Smooth snap transition */
+             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Reset shadow after snap */
+             z-index: 5; /* Can go below chlorophyll after snap if needed, or stay same */
+        }
+
+
+        /* SVG Styling */
+        .bond {
+            stroke: #333;
+            stroke-width: 3;
+            fill: none;
+            transition: stroke 0.5s ease-out, stroke-width 0.5s ease-out; /* Transition for highlighting */
+        }
+
+        .atom {
+            fill: #333; /* Default Carbon/general atom color */
+            font-size: 12px;
+            text-anchor: middle;
+            dominant-baseline: central;
+            pointer-events: none; /* Don't interfere with dragging */
+            transition: fill 0.5s ease-out; /* Transition for highlighting */
+        }
+
+        .atom.N { fill: #1a237e; } /* Nitrogen - dark blue */
+        .atom.Mg { fill: #388e3c; font-weight: bold; font-size: 16px; } /* Magnesium - green */
+        .atom.Fe { fill: #d32f2f; font-weight: bold; font-size: 16px; } /* Iron - red */
+
+
+        /* Common parts highlighting */
+        .common-bond {
+            /* Default style for common bonds */
+        }
+         .common-atom {
+            /* Default style for common atoms */
+        }
+
+
+        /* --- Highlighting Animation --- */
+        /* Flash (initial bright state) */
+        .common-bond.flash {
+             stroke: #ffeb3b; /* Bright yellow */
+             stroke-width: 6;
+             stroke-linecap: round;
+        }
+         .common-atom.flash {
+            fill: #ffeb3b; /* Bright yellow */
+        }
+
+        /* Highlighted (final persistent state) */
+        .common-bond.highlighted {
+             stroke: #ffc107; /* Amber */
+             stroke-width: 4;
+             stroke-linecap: round;
+        }
+        .common-atom.highlighted {
+            fill: #ffc107; /* Amber */
+        }
+
+        /* Transition definition for the highlight */
+        /* Applied via JS classes, transitions defined here */
+        .bond.flash, .bond.highlighted, .atom.flash, .atom.highlighted {
+             transition: stroke 0.5s ease-in-out, stroke-width 0.5s ease-in-out, fill 0.5s ease-in-out;
+        }
+
+
+        /* Optional: Non-common parts can be slightly faded or different color */
+        .non-common {
+            stroke: #666;
+            fill: #666;
+            opacity: 0.8;
+        }
+        .non-common-atom {
+             fill: #666;
+             opacity: 0.8;
+        }
+
+        /* Instructions */
+        .instructions {
+            margin-top: 30px;
+            font-size: 1.1em;
+            color: #004d40;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Comparing Chlorophyll and Hemoglobin</h1>
+    <p>Drag Hemoglobin onto Chlorophyll to see their structural similarity!</p>
+
+    <div class="container">
+        <div id="chlorophyll-container" class="molecule-container">
+            <h2>Chlorophyll (Core)</h2>
+            <svg id="chlorophyll-svg" viewBox="-100 -100 200 200">
+                <!-- Coordinates are simplified and relative to the center (0,0) -->
+                <!-- Common Porphyrin Core -->
+                <g class="porphyrin-core common">
+                    <!-- Central Mg -->
+                    <circle cx="0" cy="0" r="8" class="atom Mg"></circle>
+                    <text x="0" cy="0" class="atom Mg">Mg</text>
+
+                    <!-- Nitrogens (approximate positions around center) -->
+                    <circle cx="40" cy="0" r="4" class="atom N"></circle>
+                    <text x="40" cy="0" class="atom N">N</text>
+                    <circle cx="-40" cy="0" r="4" class="atom N"></circle>
+                    <text x="-40" cy="0" class="atom N">N</text>
+                    <circle cx="0" cy="40" r="4" class="atom N"></circle>
+                    <text x="0" cy="40" class="atom N">N</text>
+                    <circle cx="0" cy="-40" r="4" class="atom N"></circle>
+                    <text x="0" cy="-40" class="atom N">N</text>
+
+                    <!-- Bonds from Mg to N -->
+                    <line x1="0" y1="0" x2="36" y2="0" class="bond common-bond"></line>
+                    <line x1="0" y1="0" x2="-36" y2="0" class="bond common-bond"></line>
+                    <line x1="0" y1="0" x2="0" y2="36" class="bond common-bond"></line>
+                    <line x1="0" y1="0" x2="0" y2="-36" class="bond common-bond"></line>
+
+                    <!-- Simplified Pyrrole Rings & Methine Bridges -->
+                    <!-- Drawing simplified paths connecting the Ns -->
+                    <path d="M 40 0 C 55 15, 55 25, 40 40 L 30 45 L 10 45 L 0 40 L -10 45 L -30 45 L -40 40 C -55 25, -55 15, -40 0 L -30 -5 L -10 -5 L 0 -40 L 10 -5 L 30 -5 Z" class="bond common-bond"></path>
+
+                    <!-- Example of common double bonds -->
+                    <path d="M 40 0 L 50 0" class="bond common-bond"></path>
+                    <path d="M -40 0 L -50 0" class="bond common-bond"></path>
+                     <path d="M 0 40 L 0 50" class="bond common-bond"></path>
+                    <path d="M 0 -40 L 0 -50" class="bond common-bond"></path>
+
+
+                     <!-- Add a couple of extra points to represent the outer structure -->
+                    <circle cx="60" cy="0" r="3" class="atom"></circle>
+                    <circle cx="-60" cy="0" r="3" class="atom"></circle>
+                    <circle cx="0" cy="60" r="3" class="atom"></circle>
+                    <circle cx="0" cy="-60" r="3" class="atom"></circle>
+
+                    <line x1="50" y1="0" x2="60" y2="0" class="bond"></line>
+                    <line x1="-50" y1="0" x2="-60" y2="0" class="bond"></line>
+                     <line x1="0" y1="50" x2="0" y2="60" class="bond"></line>
+                    <line x1="0" y1="-50" y2="-60" class="bond"></line>
+
+                </g>
+
+                <!-- Non-common part: Chlorophyll's fifth ring and phytyl tail attachment point -->
+                <g class="non-common">
+                    <path d="M 0 40 Q -15 50, -15 60 Q -15 70, 0 80 Q 15 70, 15 60 Q 15 50, 0 40 Z" class="bond non-common"></path>
+                    <circle cx="-15" cy="60" r="3" class="atom non-common-atom"></circle>
+                    <circle cx="15" cy="60" r="3" class="atom non-common-atom"></circle>
+                     <circle cx="0" cy="80" r="3" class="atom non-common-atom"></circle>
+                    <path d="M 0 80 L 0 100" class="bond non-common"></path> <!-- Represents phytyl tail attachment -->
+                </g>
+
+            </svg>
+        </div>
+
+        <div id="hemoglobin-container" class="molecule-container">
+            <h2>Hemoglobin (Heme Group)</h2>
+             <svg id="hemoglobin-svg" viewBox="-100 -100 200 200">
+                 <!-- Coordinates are simplified and relative to the center (0,0) -->
+                <!-- Common Porphyrin Core -->
+                <g class="porphyrin-core common">
+                    <!-- Central Fe -->
+                    <circle cx="0" cy="0" r="8" class="atom Fe"></circle>
+                     <text x="0" cy="0" class="atom Fe">Fe</text>
+
+                     <!-- Nitrogens (approximate positions around center) -->
+                    <circle cx="40" cy="0" r="4" class="atom N"></circle>
+                    <text x="40" cy="0" class="atom N">N</text>
+                    <circle cx="-40" cy="0" r="4" class="atom N"></circle>
+                    <text x="-40" cy="0" class="atom N">N</text>
+                    <circle cx="0" cy="40" r="4" class="atom N"></circle>
+                    <text x="0" cy="40" class="atom N">N</text>
+                    <circle cx="0" cy="-40" r="4" class="atom N"></circle>
+                    <text x="0" cy="-40" class="atom N">N</text>
+
+                     <!-- Bonds from Fe to N -->
+                    <line x1="0" y1="0" x2="36" y2="0" class="bond common-bond"></line>
+                    <line x1="0" y1="0" x2="-36" y2="0" class="bond common-bond"></line>
+                    <line x1="0" y1="0" x2="0" y2="36" class="bond common-bond"></line>
+                    <line x1="0" y1="0" x2="0" y2="-36" class="bond common-bond"></line>
+
+                     <!-- Simplified Pyrrole Rings & Methine Bridges -->
+                    <path d="M 40 0 C 55 15, 55 25, 40 40 L 30 45 L 10 45 L 0 40 L -10 45 L -30 45 L -40 40 C -55 25, -55 15, -40 0 L -30 -5 L -10 -5 L 0 -40 L 10 -5 L 30 -5 Z" class="bond common-bond"></path>
+
+                     <!-- Example of common double bonds -->
+                    <path d="M 40 0 L 50 0" class="bond common-bond"></path>
+                    <path d="M -40 0 L -50 0" class="bond common-bond"></path>
+                     <path d="M 0 40 L 0 50" class="bond common-bond"></path>
+                    <path d="M 0 -40 L 0 -50" class="bond common-bond"></path>
+
+                     <!-- Add a couple of extra points to represent the outer structure -->
+                    <circle cx="60" cy="0" r="3" class="atom"></circle>
+                    <circle cx="-60" cy="0" r="3" class="atom"></circle>
+                    <circle cx="0" cy="60" r="3" class="atom"></circle>
+                    <circle cx="0" cy="-60" r="3" class="atom"></circle>
+
+                     <line x1="50" y1="0" x2="60" y2="0" class="bond"></line>
+                    <line x1="-50" y1="0" x2="-60" y2="0" class="bond"></line>
+                     <line x1="0" y1="50" x2="0" y2="60" class="bond"></line>
+                    <line x1="0" y1="-50" y2="-60" class="bond"></line>
+
+                </g>
+
+                <!-- Non-common part: Represents protein attachment point (e.g., Histidine) -->
+                <g class="non-common">
+                     <!-- Simplified attachment point, maybe a line extending upwards -->
+                     <path d="M 0 0 L 0 -80" class="bond non-common"></path>
+                      <circle cx="0" cy="-80" r="4" class="atom non-common-atom"></circle>
+                      <text x="0" cy="-90" class="atom non-common-atom" font-size="10">Protein</text>
+                </g>
+
+            </svg>
+        </div>
+    </div>
+
+     <p class="instructions" id="instructions">Drag the Hemoglobin (Heme) molecule towards the Chlorophyll molecule.</p>
+
+
+    <script>
+        const hemoglobinContainer = document.getElementById('hemoglobin-container');
+        const chlorophyllContainer = document.getElementById('chlorophyll-container');
+        const chlorophyllMg = chlorophyllContainer.querySelector('.atom.Mg'); // Get the Mg atom in Chlorophyll
+        const hemoglobinFe = hemoglobinContainer.querySelector('.atom.Fe'); // Get the Fe atom in Hemoglobin
+        const instructions = document.getElementById('instructions');
+
+        let isDragging = false;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+        let snapped = false;
+
+        // Function to get the center coordinates of an element relative to the viewport
+        function getElementCenter(element) {
+            const rect = element.getBoundingClientRect();
+            return {
+                x: rect.left + rect.width / 2,
+                y: rect.top + rect.height / 2
+            };
+        }
+
+        // Function to calculate distance between two points
+        function getDistance(p1, p2) {
+            const dx = p1.x - p2.x;
+            const dy = p1.y - p2.y;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        function dragStart(e) {
+            if (snapped) return; // Don't drag if already snapped
+
+            // Handle touch events
+            if (e.type === 'touchstart') {
+                e.preventDefault(); // Prevent default touch behavior (scrolling)
+                initialX = e.touches[0].clientX - xOffset;
+                initialY = e.touches[0].clientY - yOffset;
+            } else { // Handle mouse events
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+            }
+
+            if (e.target === hemoglobinContainer || hemoglobinContainer.contains(e.target)) {
+                 isDragging = true;
+                 hemoglobinContainer.classList.add('dragging');
+                 // Set initial position for absolute positioning if not already set
+                 if (hemoglobinContainer.style.position !== 'absolute') {
+                     hemoglobinContainer.style.position = 'absolute';
+                     const rect = hemoglobinContainer.getBoundingClientRect();
+                     hemoglobinContainer.style.left = rect.left + 'px';
+                     hemoglobinContainer.style.top = rect.top + 'px';
+                     // Recalculate offsets based on new position
+                     initialX = (e.type === 'touchstart' ? e.touches[0].clientX : e.clientX) - parseFloat(hemoglobinContainer.style.left);
+                     initialY = (e.type === 'touchstart' ? e.touches[0].clientY : e.clientY) - parseFloat(hemoglobinContainer.style.top);
+                 }
+            }
+        }
+
+        function dragEnd() {
+            if (!isDragging) return;
+
+            isDragging = false;
+            hemoglobinContainer.classList.remove('dragging');
+
+            // Check for snap condition when dragging ends
+             checkSnap();
+        }
+
+        function drag(e) {
+            if (!isDragging || snapped) return;
+
+             // Handle touch events
+            let currentX, currentY;
+             if (e.type === 'touchmove') {
+                e.preventDefault(); // Prevent default touch behavior (scrolling)
+                currentX = e.touches[0].clientX;
+                currentY = e.touches[0].clientY;
+            } else { // Handle mouse events
+                currentX = e.clientX;
+                currentY = e.clientY;
+            }
+
+
+            xOffset = currentX - initialX;
+            yOffset = currentY - initialY;
+
+            hemoglobinContainer.style.left = xOffset + 'px';
+            hemoglobinContainer.style.top = yOffset + 'px';
+
+            // Optional: Check for snap *during* drag for immediate feedback
+            // checkSnap(); // This can be performance heavy, better to do it on mouseup/touchend
+        }
+
+        function checkSnap() {
+             if (snapped) return;
+
+             const mgCenter = getElementCenter(chlorophyllMg);
+             const feCenter = getElementCenter(hemoglobinFe); // This gives center relative to viewport *after* dragging
+             const distance = getDistance(mgCenter, feCenter);
+
+             const snapThreshold = 80; // Pixels - adjust this value based on desired snap radius
+
+             if (distance < snapThreshold) {
+                 snapped = true;
+                 hemoglobinContainer.classList.add('snapped');
+                 instructions.textContent = "Snapping together... Look at the common structure!";
+
+                 // Calculate the required translation to align centers
+                 const currentHemoglobinRect = hemoglobinContainer.getBoundingClientRect();
+                 const currentFeCenter = getElementCenter(hemoglobinFe); // Recalculate Fe center in its *current* position
+
+                 // We want the Fe center to move to the Mg center's position
+                 const targetLeft = mgCenter.x - currentFeCenter.x + parseFloat(hemoglobinContainer.style.left);
+                 const targetTop = mgCenter.y - currentFeCenter.y + parseFloat(hemoglobinContainer.style.top);
+
+                 // Apply the target position with transition
+                 hemoglobinContainer.style.left = targetLeft + 'px';
+                 hemoglobinContainer.style.top = targetTop + 'px';
+
+                 // Trigger highlight
+                 highlightCommonParts();
+
+                 // Update instructions
+                 instructions.textContent = "The core structures (Porphyrin Ring) are highlighted!";
+                 instructions.style.color = '#ffc107'; // Match highlight color
+             }
+        }
+
+        function highlightCommonParts() {
+            const commonElementsChlorophyll = chlorophyllContainer.querySelectorAll('.common-bond, .common-atom');
+            const commonElementsHemoglobin = hemoglobinContainer.querySelectorAll('.common-bond, .common-atom');
+
+            const allCommonElements = [...commonElementsChlorophyll, ...commonElementsHemoglobin];
+
+            // Add flash class, then remove it and add highlighted class
+            allCommonElements.forEach(el => {
+                el.classList.add('flash');
+            });
+
+            setTimeout(() => {
+                allCommonElements.forEach(el => {
+                    el.classList.remove('flash');
+                    el.classList.add('highlighted');
+                });
+            }, 500); // Duration of the flash effect
+        }
+
+
+         // --- Initial Positioning ---
+         // Set the initial position of the draggable hemoglobin
+         // We need to do this *after* the page layout is stable
+        window.addEventListener('load', () => {
+             const chloroRect = chlorophyllContainer.getBoundingClientRect();
+             const hemoRect = hemoglobinContainer.getBoundingClientRect();
+
+             // Position Hemoglobin to the right of Chlorophyll initially
+             const initialLeft = chloroRect.right + 50; // 50px gap
+             const initialTop = chloroRect.top; // Align tops
+
+             hemoglobinContainer.style.position = 'absolute';
+             hemoglobinContainer.style.left = initialLeft + 'px';
+             hemoglobinContainer.style.top = initialTop + 'px';
+
+             // Set initial offsets for dragging
+             xOffset = initialLeft;
+             yOffset = initialTop;
+
+             // Adjust container height if necessary to accommodate absolutely positioned elements
+             // This is a bit tricky with absolute positioning. Ensure the body/container has enough height.
+             // Or, rely on body min-height and overflow: hidden as done in CSS.
+        });
+
+
+        // --- Event Listeners ---
+        // Mouse events
+        hemoglobinContainer.addEventListener('mousedown', dragStart, false);
+        document.addEventListener('mouseup', dragEnd, false); // Listen on document to catch release outside the element
+        document.addEventListener('mousemove', drag, false);
+
+        // Touch events
+        hemoglobinContainer.addEventListener('touchstart', dragStart, false);
+        document.addEventListener('touchend', dragEnd, false); // Listen on document
+        document.addEventListener('touchmove', drag, false);
+
+
+    </script>
+
+</body>
+</html>
